@@ -1,0 +1,1446 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Casinos Austria Blackjack Practice</title>
+<style>
+:root{--felt:#075a3a;--felt2:#033d28;--gold:#e5c46e;--ink:#101411;--cream:#fff6dc;--red:#c92d38}
+*{box-sizing:border-box}body{margin:0;background:#0b0e0c;color:var(--cream);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+header{height:60px;background:#111612;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #454b46;gap:15px}
+.logo{font-weight:950;letter-spacing:1.5px}.logo b{color:var(--gold)}.stats{display:flex;align-items:center;gap:18px;flex-wrap:wrap}.stats strong{color:var(--gold)}
+button{font:inherit}.btn{border:1px solid #d0ae54;background:linear-gradient(#f2d88c,#c9a64f);color:#17140c;border-radius:7px;padding:10px 15px;font-weight:850;cursor:pointer}.btn.dark{background:#202620;color:#eee;border-color:#566158}.btn.red{background:#74252a;color:#fff;border-color:#b44}.btn:disabled{opacity:.3;cursor:not-allowed}
+.table{min-height:735px;position:relative;padding:24px 18px 205px;background:radial-gradient(ellipse at 50% 20%,#0a754d,#07593b 52%,#033a26);border-bottom:15px solid #3b2417;overflow:hidden;box-shadow:inset 0 0 80px #001a10}
+.table:before{content:"";position:absolute;inset:18px;border:2px solid #d7bd7660;border-radius:48% 48% 13% 13%/42% 42% 12% 12%;pointer-events:none}
+.dealer{height:170px;text-align:center;position:relative;z-index:2}.label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#e6d6a7}.total{height:23px;font-weight:900;color:var(--gold)}
+.cards{display:flex;justify-content:center;min-height:92px;margin-top:7px}.card{width:62px;height:88px;background:#fff;color:#111;border:1px solid #bbb;border-radius:7px;margin-left:-7px;padding:5px;text-align:left;font:800 19px Georgia;box-shadow:0 3px 8px #0008;position:relative}.card:first-child{margin-left:0}.card.redc{color:#c51f2c}.card .s{font-size:24px}
+/* Only the newly dealt card receives this class. Existing cards never reanimate. */
+.card.dealing{z-index:30;animation:flyDeal .42s cubic-bezier(.18,.75,.25,1) both}
+@keyframes flyDeal{0%{opacity:.2;transform:translate(520px,-260px) rotate(24deg) scale(.72)}65%{opacity:1;transform:translate(-7px,8px) rotate(-4deg) scale(1.03)}100%{transform:none}}
+.seats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;max-width:1200px;margin:12px auto;position:relative;z-index:2}.seat{min-height:270px;text-align:center;padding:11px 5px;border:1px solid #e0c77755;border-radius:48% 48% 18px 18px;background:#001a101c;transition:border-color .2s,box-shadow .2s,transform .2s}.seat.you{border:2px solid var(--gold)}.seat.active{border-color:#fff0a1;box-shadow:0 0 25px #ffe98a75;transform:translateY(-5px)}
+.name{font-weight:900}.cash{font-size:11px;color:#bac8bb}.bet{display:inline-block;background:#111813;border:1px solid #b49750;border-radius:20px;padding:3px 8px;color:#f4d986;font-size:11px;margin-top:3px}.side{min-height:32px;font-size:10px;color:#f2d681;padding:3px}.remote-bets{margin:7px auto 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;max-width:210px}.remote-drop{min-height:38px;border:1px dashed #d8bd6d80;border-radius:8px;background:#00170e38;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;color:#ddcf9d;cursor:pointer;transition:.15s;padding:2px}.remote-drop strong{font-size:10px;color:#fff}.remote-drop.dragover{border-color:#fff0a0;background:#e5c46e24;transform:scale(1.04)}.remote-drop.behind{grid-column:1/-1;border-style:solid;border-color:#77a98a80}.result{height:21px;color:#ffe080;font-weight:900}
+.controls{position:absolute;z-index:5;bottom:0;left:0;right:0;background:#101712ed;border-top:1px solid #d4bb6855;padding:12px 15px 15px;backdrop-filter:blur(7px)}.message{text-align:center;min-height:24px;margin-bottom:8px;font-weight:750}.row{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap}.betting-layout{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
+.chip-rack{display:flex;align-items:center;gap:7px;padding:7px 10px;background:#0b100d;border:1px solid #414b43;border-radius:10px}
+.chip{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-weight:950;cursor:grab;user-select:none;border:5px dashed #eee;box-shadow:0 4px 8px #0008,inset 0 0 0 3px #ffffff33;transition:transform .15s,filter .15s}
+.chip:active{cursor:grabbing}.chip:hover{transform:translateY(-4px);filter:brightness(1.12)}
+.chip[data-value="5"]{background:#b82731}.chip[data-value="10"]{background:#195ba0}.chip[data-value="25"]{background:#25824b}.chip[data-value="50"]{background:#222}.chip[data-value="100"]{background:#8a4aa5}
+.bet-spots{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}.dropbet{width:112px;height:72px;border:2px dashed #d5bd7290;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#ead99f;background:#001b111f;transition:.15s;cursor:pointer}.dropbet.dragover{background:#e5c46e25;border-color:#ffe696;transform:scale(1.05);box-shadow:0 0 18px #ffe69655}.dropbet strong{font-size:18px;color:#fff}.dropbet small{font-size:10px;letter-spacing:.5px}.bet-help{font-size:11px;color:#b9c3ba;text-align:center;max-width:165px}
+.hint{font-size:12px;color:#efd582;min-width:155px;text-align:center}.rules{max-width:1180px;margin:18px auto;padding:0 18px;color:#cbd3cc}.rules summary{color:#e9ce82;font-weight:850;cursor:pointer}
+.modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;z-index:50;padding:20px}.modal.show{display:flex}.panel{width:min(1050px,100%);max-height:92vh;overflow:auto;background:#151a16;border:1px solid #ad9457;border-radius:12px;padding:20px}.head{display:flex;justify-content:space-between;gap:10px;align-items:center}
+table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #4b524c;padding:5px;text-align:center}th{background:#252b26;color:#f0d47f}.H{background:#174d7b}.S{background:#8a2e31}.D{background:#8b6d1f}.P{background:#356837}
+#shoe{position:absolute;right:5%;top:48px;width:74px;height:104px;border:2px solid #d5bd72;border-radius:8px;background:repeating-linear-gradient(45deg,#172e65,#172e65 5px,#ddd 5px,#ddd 7px);box-shadow:0 6px 15px #0008;z-index:3}
+@media(max-width:850px){header{height:auto;padding:10px}.seats{grid-template-columns:repeat(2,1fr)}.seat.you{grid-column:1/-1}.table{padding-bottom:255px}.dealer{height:150px}#shoe{display:none}}
+@media(prefers-reduced-motion:reduce){.card.dealing{animation:none}.seat{transition:none}}
+
+/* Real-table betting spots + visible chip stacks */
+.dropbet,.remote-drop{
+  position:relative; overflow:visible; background:transparent;
+  border:2px solid rgba(239,218,151,.72); color:#f2dfaa;
+  text-shadow:0 1px 2px #002817;
+}
+.dropbet{
+  width:122px;height:86px;border-radius:50%;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.035);
+}
+.dropbet small,.remote-drop small{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-weight:850;letter-spacing:1px;white-space:nowrap;opacity:.72;pointer-events:none;
+}
+.dropbet strong,.remote-drop strong{display:none}
+.remote-bets{gap:8px;max-width:220px}
+.remote-drop{
+  min-height:56px;border-radius:50%;border-style:solid;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.025);
+}
+.remote-drop.behind{min-height:61px;border:2px solid rgba(159,203,169,.72)}
+.remote-drop.behind:after{
+  content:"BET BEHIND";position:absolute;left:50%;top:-8px;transform:translateX(-50%);
+  padding:0 4px;background:#07583a;color:#cde4cf;font-size:8px;letter-spacing:1px;white-space:nowrap
+}
+.remote-drop.behind small{display:none}
+.table-chip-stack{position:absolute;inset:0;pointer-events:none}
+.table-chip{
+  --chip-y:0px;position:absolute;left:50%;top:50%;width:39px;height:39px;border-radius:50%;
+  transform:translate(-50%,calc(-50% + var(--chip-y)));
+  display:grid;place-items:center;font-size:9px;font-weight:950;color:#fff;
+  border:4px dashed rgba(255,255,255,.9);box-shadow:0 2px 4px #000a,inset 0 0 0 2px rgba(255,255,255,.18);
+  text-shadow:0 1px 2px #000;animation:chipLand .18s ease-out both
+}
+.table-chip.c5{background:#b82731}.table-chip.c10{background:#195ba0}.table-chip.c25{background:#25824b}
+.table-chip.c50{background:#202020}.table-chip.c100{background:#8a4aa5}
+@keyframes chipLand{from{opacity:0;transform:translate(-50%,calc(-50% + var(--chip-y) - 12px)) scale(.8)}to{opacity:1;transform:translate(-50%,calc(-50% + var(--chip-y))) scale(1)}}
+.dropbet.dragover,.remote-drop.dragover{background:rgba(255,230,150,.12);border-color:#fff0a0;box-shadow:0 0 18px rgba(255,230,150,.35)}
+.bet-spots{gap:18px}
+.bet-help{max-width:210px}
+
+
+/* Active split-hand focus */
+.hand-wrap{position:relative;border:2px solid transparent;border-radius:14px;padding:5px 4px 2px;margin:3px auto;max-width:230px;transition:opacity .2s,border-color .2s,box-shadow .2s,transform .2s,background .2s}
+.seat.you.has-split .hand-wrap{opacity:.48}
+.seat.you.has-split .hand-wrap.active-hand{
+  opacity:1;border-color:#ffe58a;background:rgba(255,225,120,.09);
+  box-shadow:0 0 0 3px rgba(255,229,138,.12),0 0 24px rgba(255,220,100,.52);
+  transform:translateY(-4px)
+}
+.hand-tag{display:none;position:absolute;left:50%;top:-13px;transform:translateX(-50%);z-index:20;background:#f0ce70;color:#17140c;border:1px solid #fff1ad;border-radius:20px;padding:3px 10px;font-size:9px;font-weight:950;letter-spacing:1px;white-space:nowrap;box-shadow:0 3px 8px #0008}
+.seat.you.has-split .hand-wrap.active-hand .hand-tag{display:block}
+.seat.you.has-split .hand-wrap:not(.active-hand) .card{filter:saturate(.62) brightness(.8)}
+.seat.you.has-split .hand-wrap.active-hand .card{filter:none}
+.split-progress{display:none;margin:3px auto 0;font-size:10px;color:#ffe38b;font-weight:800;letter-spacing:.4px}
+.seat.you.has-split .split-progress{display:block}
+
+.seat.you .your-bets{grid-template-columns:repeat(2,minmax(0,1fr));max-width:220px}.seat.you .your-bets .remote-drop{min-height:52px}.seat.you .your-bets .own-main{grid-column:1/-1;min-height:60px;border:2px solid rgba(239,218,151,.82)}
+.blackjack-banner{
+ position:fixed;left:50%;top:42%;transform:translate(-50%,-50%) scale(.75);
+ z-index:45;pointer-events:none;opacity:0;
+ font:950 clamp(48px,9vw,120px)/.9 Georgia,serif;
+ letter-spacing:5px;color:#ffe28a;text-shadow:0 4px 0 #6f4b10,0 0 20px #ffd85c,0 8px 35px #000;
+}
+.blackjack-banner.show{animation:blackjackBanner 1.7s cubic-bezier(.16,.8,.25,1) both}
+@keyframes blackjackBanner{
+ 0%{opacity:0;transform:translate(-50%,-50%) scale(.55) rotate(-3deg)}
+ 15%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(1deg)}
+ 25%,75%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+ 100%{opacity:0;transform:translate(-50%,-55%) scale(1.04)}
+}
+
+
+/* Printed casino-felt rule and insurance/bust arc */
+.felt-print{
+ position:relative;z-index:4;height:128px;max-width:920px;margin:-5px auto 3px;
+ pointer-events:none;text-align:center;color:#e9dba8;
+ font-family:Georgia,"Times New Roman",serif;text-shadow:0 1px 1px #003321
+}
+.table-rule{
+ font-size:16px;font-weight:800;letter-spacing:2.8px;margin-bottom:4px;
+ color:rgba(244,225,169,.92)
+}
+.insurance-arc{position:relative;width:min(760px,90vw);height:103px;margin:auto}
+.arc-line{
+ position:absolute;left:5%;right:5%;top:7px;height:92px;
+ border-top:3px solid rgba(236,216,156,.78);
+ border-radius:50% 50% 0 0/100% 100% 0 0;
+ transform:scaleY(.58);transform-origin:top center
+}
+.arc-line:after{
+ content:"";position:absolute;left:4%;right:4%;top:10px;height:82px;
+ border-top:1px solid rgba(236,216,156,.48);border-radius:50% 50% 0 0/100% 100% 0 0
+}
+.arc-bet{
+ pointer-events:auto;position:absolute;width:116px;height:57px;border:2px solid rgba(239,218,151,.76);
+ border-radius:50%;display:flex;align-items:center;justify-content:center;
+ color:#f0dda2;font:800 11px/1 Georgia,serif;letter-spacing:1.4px;
+ background:rgba(0,45,27,.09);cursor:pointer;transition:.15s
+}
+.arc-bet.dragover{background:rgba(255,230,150,.13);border-color:#fff0a0;box-shadow:0 0 18px #ffe69655}
+.insurance-left{left:13%;top:29px;transform:rotate(-9deg)}
+.insurance-right{right:13%;top:29px;transform:rotate(9deg)}
+.bust-center{left:50%;top:47px;transform:translateX(-50%);width:126px;height:61px;font-size:15px}
+.insurance-pays{
+ position:absolute;left:50%;top:18px;transform:translateX(-50%);
+ font-size:9px;letter-spacing:1.8px;color:rgba(237,219,164,.72);white-space:nowrap
+}
+.arc-bet .table-chip-stack{transform:rotate(0deg)}
+.insurance-left .table-chip-stack{transform:rotate(9deg)}
+.insurance-right .table-chip-stack{transform:rotate(-9deg)}
+@media(max-width:700px){
+ .felt-print{height:118px}.table-rule{font-size:12px;letter-spacing:1.5px}
+ .arc-bet{width:88px;height:49px;font-size:9px}.bust-center{width:95px;height:54px}
+ .insurance-left{left:4%}.insurance-right{right:4%}
+}
+
+
+.gesture-hint{
+ position:absolute;right:18px;bottom:10px;z-index:8;
+ font-size:10px;letter-spacing:.5px;color:rgba(245,228,180,.58);
+ pointer-events:none;text-transform:uppercase
+}
+.table.gesture-hit{animation:gestureHit .16s ease}
+@keyframes gestureHit{50%{filter:brightness(1.08)}}
+
+
+/* Prevent browser text selection while using blackjack table gestures. */
+.table,.table *{
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+}
+.table{
+  touch-action:none;
+  cursor:default;
+}
+
+
+.seat.you .own-main.double-ready{
+ border-color:#ffe58a;box-shadow:0 0 18px rgba(255,229,138,.32)
+}
+.seat.you .own-main.double-ready:before{
+ content:"DRAG SAME BET HERE TO DOUBLE";position:absolute;left:50%;bottom:-15px;
+ transform:translateX(-50%);font-size:7px;letter-spacing:.7px;color:#ffe7a1;white-space:nowrap
+}
+
+
+/* Cleaner multi-hand split layout */
+.seat.you.has-split{
+  min-width:310px;
+}
+.seat.you.has-split .hands,
+.seat.you.has-split .hand-area{
+  width:100%;
+}
+.seat.you.has-split .hand-wrap{
+  display:inline-flex;
+  vertical-align:top;
+  flex-direction:column;
+  align-items:center;
+  width:145px;
+  min-height:150px;
+  margin:5px 3px 2px;
+  box-sizing:border-box;
+}
+.seat.you.has-split .hand-wrap .cards{
+  min-height:92px;
+  justify-content:center;
+  flex-wrap:nowrap;
+}
+.seat.you.has-split .hand-wrap .card{
+  margin-left:-24px;
+}
+.seat.you.has-split .hand-wrap .card:first-child{
+  margin-left:0;
+}
+.seat.you.has-split .split-progress{
+  clear:both;
+}
+.split-chip-row{
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  gap:9px;
+  min-height:48px;
+  margin:2px auto 4px;
+}
+.split-chip-pile{
+  position:relative;
+  width:42px;
+  height:44px;
+}
+.split-chip-pile .table-chip-stack{
+  position:absolute;
+  inset:0;
+}
+.split-chip-pile.active-split-bet{
+  filter:drop-shadow(0 0 7px rgba(255,229,138,.75));
+}
+.split-chip-pile.active-split-bet:after{
+  content:"";
+  position:absolute;
+  left:50%;bottom:-4px;
+  width:34px;height:2px;
+  transform:translateX(-50%);
+  background:#ffe58a;
+  box-shadow:0 0 6px #ffe58a;
+}
+@media(min-width:1150px){
+  .seats{gap:12px;align-items:start}
+  .seat.you.has-split{min-width:340px}
+  .seat.you.has-split .hand-wrap{width:155px}
+}
+
+
+/* Fixed one-screen casino layout */
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden !important;
+}
+body{
+  min-height:100vh;
+  height:100vh;
+}
+.table{
+  box-sizing:border-box;
+  width:100vw;
+  height:100vh;
+  min-height:0 !important;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  padding:10px 14px 8px !important;
+}
+.topbar{
+  flex:0 0 auto;
+  margin-bottom:2px !important;
+}
+.dealer{
+  flex:0 0 auto;
+  min-height:112px !important;
+  margin:0 auto !important;
+}
+.felt-print{
+  flex:0 0 102px;
+  height:102px !important;
+  margin:-2px auto 0 !important;
+}
+.insurance-arc{
+  height:78px !important;
+}
+.arc-line{
+  height:70px !important;
+}
+.arc-bet{
+  min-height:0 !important;
+}
+.insurance-left,.insurance-right{top:22px !important}
+.bust-center{top:34px !important}
+.insurance-pays{top:10px !important}
+
+.seats{
+  flex:1 1 auto;
+  min-height:0;
+  width:100%;
+  display:grid !important;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  align-items:end !important;
+  justify-items:center;
+  gap:8px !important;
+  margin:0 auto !important;
+  overflow:visible;
+}
+.seat{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0 !important;
+  max-width:245px;
+  padding:5px !important;
+  align-self:end;
+}
+.seat.you{
+  max-width:290px;
+}
+.seat.you.has-split{
+  min-width:0 !important;
+  max-width:340px;
+}
+.seat.you.has-split .hand-wrap{
+  width:calc(50% - 8px) !important;
+  min-width:0;
+  min-height:128px !important;
+  margin:4px 2px !important;
+}
+.seat.you.has-split .hand-wrap .cards{
+  min-height:76px !important;
+}
+.card{
+  transform-origin:center bottom;
+}
+.remote-bets{
+  margin-top:3px !important;
+  gap:4px !important;
+}
+.remote-drop{
+  min-height:42px !important;
+}
+.seat.you .your-bets .remote-drop{
+  min-height:42px !important;
+}
+.seat.you .your-bets .own-main{
+  min-height:48px !important;
+}
+.split-chip-row{
+  min-height:37px !important;
+  margin:0 auto 1px !important;
+}
+.split-chip-pile{
+  height:37px !important;
+}
+.controls{
+  flex:0 0 auto;
+  margin:3px auto !important;
+}
+#bets{
+  flex:0 0 auto;
+  margin:2px auto 0 !important;
+  padding:2px 0 !important;
+}
+.chip-rack{
+  padding:4px 7px !important;
+}
+.chip{
+  width:43px !important;
+  height:43px !important;
+  font-size:11px !important;
+}
+.bet-help{
+  display:none;
+}
+.message{
+  flex:0 0 auto;
+  min-height:18px !important;
+  margin:2px auto !important;
+}
+.gesture-hint{
+  bottom:4px !important;
+}
+
+/* Short desktop screens */
+@media (max-height:850px){
+  .table{padding:6px 10px 5px !important}
+  .dealer{min-height:92px !important}
+  .felt-print{flex-basis:84px;height:84px !important}
+  .table-rule{font-size:12px !important;margin-bottom:0 !important}
+  .insurance-arc{height:64px !important}
+  .arc-line{height:58px !important}
+  .arc-bet{width:96px !important;height:43px !important}
+  .insurance-left,.insurance-right{top:15px !important}
+  .bust-center{top:25px !important;width:105px !important;height:46px !important}
+  .insurance-pays{top:5px !important}
+  .seat{font-size:11px;padding:3px !important}
+  .remote-drop,.seat.you .your-bets .remote-drop{min-height:35px !important}
+  .seat.you .your-bets .own-main{min-height:39px !important}
+  .hand-wrap{margin-top:1px !important}
+  .seat.you.has-split .hand-wrap{min-height:105px !important}
+  .cards{min-height:65px !important}
+  .chip{width:38px !important;height:38px !important;border-width:4px !important}
+  .table-chip{width:33px !important;height:33px !important;font-size:8px !important}
+  .gesture-hint{display:none}
+}
+
+/* Narrower screens: scale the complete felt rather than allowing scrolling. */
+@media (max-width:1050px){
+  .seats{gap:3px !important}
+  .seat{transform:scale(.9);transform-origin:center bottom}
+  .seat.you{transform:scale(.94)}
+}
+
+
+.table-action-buttons{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:6px;
+ flex-wrap:nowrap;
+}
+.table-action-buttons #actions{
+ display:inline-flex;
+ align-items:center;
+ gap:6px;
+}
+.table-action-buttons #actions[hidden]{display:none !important}
+.table-action-buttons .hint{
+ max-width:180px;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis;
+}
+
+
+/* Keep action controls visibly beside the chip rack */
+#bets.betting-layout{
+  position:relative;
+  z-index:30;
+  width:100%;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;
+  gap:14px;
+  overflow:visible !important;
+}
+#bets.betting-layout > div:first-child{
+  grid-column:2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#bets .table-action-buttons{
+  grid-column:3;
+  justify-self:start;
+  display:flex !important;
+  position:relative;
+  z-index:35;
+  align-items:center;
+  gap:6px;
+  white-space:nowrap;
+}
+#bets .table-action-buttons #actions:not([hidden]){
+  display:inline-flex !important;
+}
+#bets .table-action-buttons .btn{
+  position:relative;
+  z-index:36;
+  flex:0 0 auto;
+}
+@media(max-width:900px){
+  #bets.betting-layout{
+    grid-template-columns:auto auto;
+    justify-content:center;
+    gap:8px;
+  }
+  #bets.betting-layout > div:first-child{grid-column:1}
+  #bets .table-action-buttons{grid-column:2}
+  #bets .chip{width:34px !important;height:34px !important;font-size:9px !important}
+  #bets .chip-rack{gap:3px !important}
+}
+
+
+/* Reliable fixed bottom controls */
+.bottom-bar{
+  flex:0 0 auto;
+  position:relative;
+  z-index:100;
+  width:100%;
+  min-height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  padding:4px 8px 5px;
+  box-sizing:border-box;
+  overflow:visible;
+}
+.chip-rack-wrap{flex:0 0 auto;position:relative;z-index:101}
+.bottom-actions{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  position:relative;
+  z-index:102;
+}
+.bottom-actions .btn{display:inline-flex;align-items:center;justify-content:center;min-width:68px}
+.bottom-actions .btn[hidden]{display:none !important}
+.bottom-bar .hint{
+  position:absolute;
+  left:50%;
+  bottom:-8px;
+  transform:translateX(-50%);
+  max-width:460px;
+  white-space:nowrap;
+  font-size:9px;
+  pointer-events:none;
+}
+@media(max-width:900px){
+ .bottom-bar{gap:7px;padding-inline:3px}
+ .bottom-actions{gap:3px}
+ .bottom-actions .btn{min-width:52px;padding-left:7px!important;padding-right:7px!important;font-size:10px}
+ .bottom-bar .chip{width:32px!important;height:32px!important;font-size:8px!important}
+ .bottom-bar .chip-rack{gap:2px!important;padding:3px 4px!important}
+}
+
+
+#bets.bottom-bar{
+ display:flex !important;
+ grid-template-columns:none !important;
+ visibility:visible !important;
+ opacity:1 !important;
+}
+#bets.bottom-bar[hidden]{display:none !important}
+#bets.bottom-bar > *{visibility:visible}
+
+
+/* FINAL bottom bar: chips then DEAL/HIT/STAND/DOUBLE/SPLIT/PAYOUT in one row */
+#bets.bottom-bar{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:12px !important;
+  width:100% !important;
+  min-height:58px !important;
+  overflow:visible !important;
+  position:relative !important;
+  z-index:500 !important;
+}
+#bets .chip-rack-wrap{
+  flex:0 0 auto !important;
+  position:relative !important;
+  z-index:501 !important;
+}
+#bets #actions.bottom-actions{
+  display:flex !important;
+  flex:0 0 auto !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  gap:5px !important;
+  position:relative !important;
+  z-index:502 !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+#bets #actions.bottom-actions .btn{
+  display:inline-flex !important;
+  visibility:visible !important;
+  opacity:1;
+  position:relative !important;
+  min-width:64px;
+  flex:0 0 auto !important;
+}
+#bets #actions.bottom-actions .btn:disabled{
+  display:inline-flex !important;
+  visibility:visible !important;
+  opacity:.32 !important;
+  cursor:not-allowed;
+  filter:saturate(.35);
+}
+#bets #actions.bottom-actions .btn:not(:disabled){
+  opacity:1 !important;
+}
+@media(max-width:1050px){
+ #bets.bottom-bar{gap:6px !important}
+ #bets #actions.bottom-actions{gap:3px !important}
+ #bets #actions.bottom-actions .btn{min-width:49px !important;padding:7px 6px !important;font-size:9px !important}
+ #bets .chip{width:31px !important;height:31px !important;font-size:8px !important}
+ #bets .chip-rack{gap:2px !important;padding:3px !important}
+}
+
+
+/* Compact the dealer-rule / insurance band and keep controls anchored */
+.table{
+  position:relative !important;
+  padding-bottom:68px !important;
+}
+
+/* Much smaller printed middle band */
+.felt-print{
+  flex:0 0 68px !important;
+  height:68px !important;
+  min-height:68px !important;
+  margin:-4px auto -2px !important;
+}
+.table-rule{
+  font-size:11px !important;
+  line-height:12px !important;
+  letter-spacing:1.8px !important;
+  margin:0 0 -2px !important;
+}
+.insurance-arc{
+  width:min(680px,82vw) !important;
+  height:54px !important;
+}
+.arc-line{
+  top:2px !important;
+  height:48px !important;
+  border-top-width:2px !important;
+}
+.arc-line:after{
+  top:5px !important;
+  height:42px !important;
+}
+.arc-bet{
+  width:90px !important;
+  height:38px !important;
+  font-size:8px !important;
+}
+.insurance-left{
+  left:17% !important;
+  top:13px !important;
+}
+.insurance-right{
+  right:17% !important;
+  top:13px !important;
+}
+.bust-center{
+  top:20px !important;
+  width:96px !important;
+  height:41px !important;
+  font-size:11px !important;
+}
+.insurance-pays{
+  top:3px !important;
+  font-size:7px !important;
+  letter-spacing:1px !important;
+}
+
+/* Give cards the freed vertical space rather than growing the page */
+.seats{
+  flex:1 1 0 !important;
+  min-height:0 !important;
+  align-items:end !important;
+  padding-bottom:0 !important;
+}
+.seat{
+  align-self:end !important;
+}
+
+/* Bottom controls are pinned to the viewport/table bottom.
+   Cards and split layouts can no longer push them down. */
+#bets.bottom-bar{
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:5px !important;
+  height:55px !important;
+  min-height:55px !important;
+  margin:0 !important;
+  padding:3px 8px !important;
+  z-index:800 !important;
+  box-sizing:border-box !important;
+}
+
+/* Message sits just above the fixed controls */
+.message{
+  position:absolute !important;
+  left:50% !important;
+  bottom:61px !important;
+  transform:translateX(-50%) !important;
+  z-index:790 !important;
+  margin:0 !important;
+  width:min(720px,80vw) !important;
+  text-align:center !important;
+  pointer-events:none;
+}
+
+/* Keep the hint contained in the fixed bar */
+#bets .hint{
+  bottom:-1px !important;
+}
+
+/* On short displays make the middle print almost flat */
+@media(max-height:800px){
+  .felt-print{
+    flex-basis:56px !important;
+    height:56px !important;
+    min-height:56px !important;
+  }
+  .table-rule{
+    font-size:9px !important;
+    line-height:10px !important;
+  }
+  .insurance-arc{height:45px !important}
+  .arc-line{height:39px !important}
+  .arc-bet{width:80px !important;height:32px !important}
+  .insurance-left,.insurance-right{top:10px !important}
+  .bust-center{top:15px !important;width:86px !important;height:35px !important}
+  .insurance-pays{font-size:6px !important}
+}
+
+
+/* Pull player boxes closer to the BUST / INSURANCE line */
+.felt-print{
+  margin:-4px auto -18px !important;
+}
+.seats{
+  position:relative !important;
+  top:-12px !important;
+}
+@media(max-height:800px){
+  .felt-print{margin:-4px auto -15px !important}
+  .seats{top:-10px !important}
+}
+
+
+/* === FINAL VIEWPORT-FIT LAYOUT === */
+html,body{
+  width:100% !important;
+  height:100% !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+}
+body{
+  position:fixed !important;
+  inset:0 !important;
+}
+
+/* Table is exactly one viewport and has an explicitly reserved control row. */
+.table{
+  width:100vw !important;
+  height:100dvh !important;
+  min-height:0 !important;
+  max-height:100dvh !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+  padding:6px 10px 4px !important;
+  display:grid !important;
+  grid-template-rows:auto auto auto minmax(0,1fr) auto auto !important;
+  grid-template-columns:1fr !important;
+  align-items:stretch !important;
+}
+
+/* Reset previous absolute positioning that allowed controls to leave the viewport. */
+#bets.bottom-bar{
+  position:relative !important;
+  inset:auto !important;
+  grid-row:6 !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:48px !important;
+  max-height:58px !important;
+  margin:0 !important;
+  align-self:end !important;
+  z-index:900 !important;
+}
+.message{
+  position:relative !important;
+  inset:auto !important;
+  transform:none !important;
+  grid-row:5 !important;
+  width:100% !important;
+  min-height:16px !important;
+  margin:0 !important;
+  align-self:end !important;
+}
+
+/* Top elements consume only what they need. */
+.topbar{grid-row:1 !important;margin:0 !important}
+.dealer{
+  grid-row:2 !important;
+  min-height:0 !important;
+  height:auto !important;
+  margin:0 auto !important;
+}
+.felt-print{
+  grid-row:3 !important;
+  min-height:0 !important;
+  height:58px !important;
+  flex:none !important;
+  margin:-2px auto -10px !important;
+}
+.seats{
+  grid-row:4 !important;
+  position:relative !important;
+  top:0 !important;
+  min-height:0 !important;
+  height:100% !important;
+  overflow:hidden !important;
+  align-items:end !important;
+  margin:0 !important;
+}
+
+/* The actual boxes shrink with the available vertical space instead of pushing controls. */
+.seat{
+  max-height:100% !important;
+  overflow:visible !important;
+}
+.dealer .cards,.seat .cards{
+  min-height:0 !important;
+}
+
+/* Dynamic scaling based on viewport HEIGHT. */
+@media(max-height:900px){
+  .dealer{transform:scale(.92);transform-origin:center top}
+  .seat{transform:scale(.92);transform-origin:center bottom}
+  .seat.you{transform:scale(.94);transform-origin:center bottom}
+}
+@media(max-height:780px){
+  .table{padding-top:3px !important}
+  .dealer{transform:scale(.82);transform-origin:center top;margin-bottom:-12px !important}
+  .felt-print{height:49px !important;margin:-8px auto -13px !important}
+  .table-rule{font-size:8px !important;line-height:9px !important}
+  .insurance-arc{height:40px !important}
+  .arc-line{height:34px !important}
+  .arc-bet{width:72px !important;height:29px !important;font-size:7px !important}
+  .insurance-left,.insurance-right{top:8px !important}
+  .bust-center{top:13px !important;width:78px !important;height:31px !important;font-size:9px !important}
+  .seat{transform:scale(.80);transform-origin:center bottom}
+  .seat.you{transform:scale(.84);transform-origin:center bottom}
+  #bets.bottom-bar{min-height:43px !important;max-height:48px !important}
+  #bets .chip{width:29px !important;height:29px !important}
+  #bets #actions.bottom-actions .btn{padding:6px 5px !important;min-width:47px !important;font-size:9px !important}
+}
+@media(max-height:680px){
+  .topbar{transform:scale(.86);transform-origin:center top;margin-bottom:-8px !important}
+  .dealer{transform:scale(.72);margin-bottom:-20px !important}
+  .felt-print{height:42px !important;margin:-12px auto -15px !important}
+  .seat{transform:scale(.68);transform-origin:center bottom}
+  .seat.you{transform:scale(.73);transform-origin:center bottom}
+  .remote-bets{margin-top:0 !important}
+  #bets.bottom-bar{min-height:39px !important;max-height:43px !important}
+  #bets .chip{width:26px !important;height:26px !important;border-width:3px !important}
+  #bets #actions.bottom-actions .btn{padding:5px 4px !important;min-width:43px !important;font-size:8px !important}
+  .message{font-size:10px !important;min-height:12px !important}
+}
+@media(max-height:580px){
+  .dealer{transform:scale(.62);margin-bottom:-28px !important}
+  .felt-print{height:36px !important}
+  .seat{transform:scale(.58)}
+  .seat.you{transform:scale(.63)}
+  .table-rule{font-size:7px !important}
+  #bets .hint{display:none !important}
+}
+
+/* Height-fit beats older width scaling rules. */
+@media(max-width:1050px){
+  .seat{transform-origin:center bottom !important}
+}
+
+/* Use classic vh fallback where dvh isn't available. */
+@supports not (height:100dvh){
+  .table{height:100vh !important;max-height:100vh !important}
+}
+
+/* === BALANCED FINAL TABLE LAYOUT ===
+   The header and felt share one viewport; the controls therefore always keep
+   their own visible row instead of being clipped below the screen. */
+body{
+  display:grid !important;
+  grid-template-rows:auto minmax(0,1fr) !important;
+}
+header{
+  grid-row:1;
+  flex:0 0 auto;
+}
+.table{
+  grid-row:2;
+  width:100% !important;
+  height:100% !important;
+  max-height:none !important;
+  padding:5px 14px 4px !important;
+  grid-template-columns:minmax(0,1fr) !important;
+  grid-template-rows:clamp(155px,20vh,210px) 50px minmax(0,1fr) auto !important;
+}
+
+/* A larger dealer zone and a tighter rules/insurance band. */
+.dealer{
+  grid-row:1 !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  transform:none !important;
+  transform-origin:center top !important;
+  padding-top:5px;
+}
+.dealer .cards{
+  min-height:92px !important;
+}
+.felt-print{
+  grid-row:2 !important;
+  width:min(760px,82vw) !important;
+  height:50px !important;
+  min-height:50px !important;
+  margin:-3px auto 0 !important;
+}
+.table-rule{
+  font-size:10px !important;
+  line-height:11px !important;
+  margin:0 !important;
+}
+.insurance-arc{
+  height:39px !important;
+}
+.arc-line{
+  top:1px !important;
+  height:34px !important;
+}
+.arc-line:after{
+  top:4px !important;
+  height:29px !important;
+}
+.arc-bet{
+  width:82px !important;
+  height:31px !important;
+}
+.insurance-left,.insurance-right{
+  top:6px !important;
+}
+.bust-center{
+  top:8px !important;
+  width:88px !important;
+  height:33px !important;
+  font-size:9px !important;
+}
+.insurance-pays{
+  top:0 !important;
+}
+
+/* Keep all five boxes on one genuinely centered axis.  Centering within the
+   flexible player row also removes the oversized empty band above them. */
+.seats{
+  grid-row:3 !important;
+  width:min(1200px,100%) !important;
+  max-width:1200px !important;
+  height:100% !important;
+  margin:0 auto !important;
+  justify-self:center !important;
+  justify-items:center !important;
+  align-items:center !important;
+  top:0 !important;
+  left:auto !important;
+  right:auto !important;
+}
+.seat{
+  justify-self:center !important;
+  align-self:center !important;
+}
+
+/* Controls are a normal, reserved grid row.  They can no longer be pushed or
+   cropped out by cards, splits, or the outer header. */
+.controls{
+  grid-row:4 !important;
+  position:relative !important;
+  inset:auto !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:2px 0 0 !important;
+  display:grid !important;
+  grid-template-rows:auto auto !important;
+  align-self:end !important;
+  overflow:visible !important;
+  z-index:1000 !important;
+}
+.controls .message{
+  grid-row:1 !important;
+  position:relative !important;
+  inset:auto !important;
+  transform:none !important;
+  width:100% !important;
+  min-height:18px !important;
+  margin:0 !important;
+}
+#bets.bottom-bar{
+  grid-row:2 !important;
+  position:relative !important;
+  inset:auto !important;
+  height:56px !important;
+  min-height:56px !important;
+  max-height:none !important;
+  margin:0 !important;
+  overflow:visible !important;
+}
+
+@media(max-height:800px){
+  .table{
+    grid-template-rows:140px 44px minmax(0,1fr) auto !important;
+    padding-top:3px !important;
+  }
+  .dealer{transform:none !important;margin:0 auto !important}
+  .felt-print{
+    height:44px !important;
+    min-height:44px !important;
+    margin:-4px auto 0 !important;
+  }
+  .insurance-arc{height:34px !important}
+  .arc-line{height:29px !important}
+  .arc-bet{height:28px !important}
+  .insurance-left,.insurance-right{top:4px !important}
+  .bust-center{top:6px !important;height:29px !important}
+}
+@media(max-height:620px){
+  .table{grid-template-rows:112px 38px minmax(0,1fr) auto !important}
+  .dealer{transform:scale(.78) !important;transform-origin:center top !important}
+  .felt-print{height:38px !important;min-height:38px !important}
+  .table-rule{font-size:7px !important;line-height:8px !important}
+}
+@media(max-width:620px){
+  #bets.bottom-bar{
+    height:auto !important;
+    min-height:82px !important;
+    flex-wrap:wrap !important;
+    row-gap:3px !important;
+  }
+  #bets .chip-rack-wrap,
+  #bets #actions.bottom-actions{
+    width:100%;
+    justify-content:center;
+  }
+}
+
+</style>
+</head>
+<body>
+<header><div class="logo">BLACKJACK <b>AUSTRIA PRACTICE</b></div><div class="stats"><span>Bankroll <strong id="bank">€1,000</strong></span><span>Shoe <strong id="shoeN">312</strong></span><button class="btn dark" id="soundBtn" title="Toggle sound">🔊 SFX</button><button class="btn dark" id="bsBtn">Basic Strategy</button></div></header>
+<main class="table" id="gameTable"><div class="gesture-hint">Double-click: Hit · Swipe: Stand · Add equal chips to MAIN: Double · Left + right click: Split</div>
+<div id="shoe"></div>
+<section class="dealer"><div class="label">Bank / Dealer</div><div class="total" id="dealerTotal"></div><div class="cards" id="dealerCards"></div></section>
+
+<section class="felt-print" aria-label="Blackjack table rules and insurance line">
+  <div class="table-rule">DEALER MUST STAND ON 17</div>
+  <div class="insurance-arc">
+    <div class="arc-line"></div>
+    <div class="arc-bet insurance-left" data-ownbet="insurance"><span>INSURANCE</span><div class="insurance-amount"></div></div>
+    <div class="arc-bet bust-center" data-ownbet="bust"><span>BUST</span></div>
+    <div class="arc-bet insurance-right" data-ownbet="insurance"><span>INSURANCE</span><div class="insurance-amount"></div></div>
+    <div class="insurance-pays">INSURANCE PAYS 2 TO 1</div>
+  </div>
+</section>
+<section class="seats" id="seats"></section>
+<section class="controls">
+<div class="message" id="msg">Place your bets.</div>
+<div class="bottom-bar" id="bets">
+  <div class="chip-rack-wrap">
+    <div class="chip-rack" aria-label="Chip rack">
+      <div class="chip" draggable="true" data-value="5">€5</div>
+      <div class="chip" draggable="true" data-value="10">€10</div>
+      <div class="chip" draggable="true" data-value="25">€25</div>
+      <div class="chip" draggable="true" data-value="50">€50</div>
+      <div class="chip" draggable="true" data-value="100">€100</div>
+    </div>
+  </div>
+  <div class="bottom-actions" id="actions">
+    <button class="btn" id="dealBtn">DEAL</button>
+    <button class="btn" id="hit" disabled>HIT</button>
+    <button class="btn" id="stand" disabled>STAND</button>
+    <button class="btn" id="double" disabled>DOUBLE</button>
+    <button class="btn" id="split" disabled>SPLIT</button>
+    <button class="btn" id="payout" disabled>PAYOUT</button>
+  </div>
+  <span class="hint" id="hint"></span>
+</div>
+</section></main>
+<div class="rules"><details><summary>Casinos Austria Classic rules implemented</summary>
+<p>Six decks. Every box receives two cards while the bank receives <b>only one initial card</b>. Boxes act one after another; only after all boxes finish does the bank draw its second card and then draw through 16 and stand on 17+. Equal-value cards may be split and re-split; split aces receive one additional card only. Doubling is allowed after the first two cards and after splits except split aces, and receives exactly one card. Three sevens are paid immediately. This practice table uses a 3:2 Black Jack payout; Casinos Austria notes that the actual offered variant may instead use 6:5 or 5:1 and posts the applicable payout at the physical table.</p>
+<p><b>Bet Behind:</b> Drag chips onto another box's Bet Behind field. You follow that box's result and do not control its decisions. If it splits, this simulator divides your behind stake across the resulting hands.</p><p><b>C3:</b> Highest Hearts 300:1 · Jacks in Black 200:1 · Triplets 50:1 · Red Carpet 4:1. <b>123Jacks:</b> 3 J♠ 300:1 · 3 Jacks 50:1 · 2 J♠ 20:1 · 2 Jacks 10:1 · 1 J♠ 4:1 · 1 Jack 2:1. <b>Bust:</b> dealer bust 2:1. Insurance is offered when the dealer's initial card is an ace and pays 2:1.</p>
+</details></div>
+<div class="blackjack-banner" id="blackjackBanner">BLACKJACK!</div><div class="modal" id="bsModal"><div class="panel"><div class="head"><div><h2 style="margin:0">Basic Strategy</h2><small>6 deck · dealer stands 17 · DAS</small></div><button class="btn dark" id="closeBS">Close</button></div><div id="bsTable" style="margin-top:14px"></div></div></div>
+<script>
+const $=id=>document.getElementById(id), SUITS=['♠','♥','♦','♣'],RANKS=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+const names=['Mia','Felix','YOU','Anna','David'];let shoe=[],players=[],dealer=[],bankroll=1000,state='bet',activePlayer=-1,activeHand=0,lastAnim=null,timer=null,roundStartBankroll=1000;const placed={main:0,c3:0,jacks:0,bust:0,insurance:0},stacks={main:[],c3:[],jacks:[],bust:[],insurance:[]};const remoteBets=Array.from({length:5},()=>({behind:0,c3:0,jacks:0,behindStack:[],c3Stack:[],jacksStack:[]}));
+function sleep(ms){return new Promise(r=>timer=setTimeout(r,ms))}
+let sfxOn=true,audioCtx=null;
+function ac(){if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx}
+function tone(freq,dur=.06,type='sine',gain=.035,delay=0){
+ if(!sfxOn)return;let c=ac(),o=c.createOscillator(),g=c.createGain(),t=c.currentTime+delay;
+ o.type=type;o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(gain,t+.008);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+ o.connect(g).connect(c.destination);o.start(t);o.stop(t+dur+.02)
+}
+function noise(dur=.055,gain=.025){
+ if(!sfxOn)return;let c=ac(),n=Math.max(1,Math.floor(c.sampleRate*dur)),b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0);
+ for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
+ let src=c.createBufferSource(),g=c.createGain(),f=c.createBiquadFilter();src.buffer=b;f.type='bandpass';f.frequency.value=1800;f.Q.value=.7;g.gain.value=gain;src.connect(f).connect(g).connect(c.destination);src.start()
+}
+const SFX={
+ card(){noise(.06,.022);tone(180,.045,'triangle',.012)},
+ chip(){tone(620,.045,'sine',.025);tone(880,.035,'sine',.018,.025)},
+ click(){tone(310,.035,'square',.012)},
+ win(){tone(523,.09,'sine',.03);tone(659,.09,'sine',.03,.09);tone(784,.15,'sine',.035,.18)},
+ lose(){tone(220,.12,'triangle',.025);tone(165,.18,'triangle',.025,.11)},
+ blackjack(){tone(523,.08,'sine',.035);tone(659,.08,'sine',.035,.07);tone(784,.08,'sine',.035,.14);tone(1047,.2,'sine',.04,.21)}
+};
+function newShoe(){shoe=[];for(let d=0;d<6;d++)for(const s of SUITS)for(const r of RANKS)shoe.push({r,s,id:crypto.randomUUID?crypto.randomUUID():Math.random()+''});for(let i=shoe.length-1;i;i--){let j=Math.floor(Math.random()*(i+1));[shoe[i],shoe[j]]=[shoe[j],shoe[i]]}}
+function draw(){if(!shoe.length)newShoe();return shoe.pop()}
+
+function fitTableToViewport(){
+ const table=$('gameTable'),seats=document.querySelector('.seats'),bar=$('bets');
+ if(!table||!seats||!bar)return;
+ // CSS handles normal cases. This variable lets very tall split content compress further.
+ requestAnimationFrame(()=>{
+   const available=seats.clientHeight;
+   const boxes=[...seats.querySelectorAll('.seat')];
+   boxes.forEach(box=>{
+     box.style.removeProperty('--fit-scale');
+     const needed=box.scrollHeight;
+     if(needed>available&&available>0){
+       const scale=Math.max(.52,Math.min(1,available/needed));
+       // Preserve the CSS base scale by using zoom where supported; transform fallback is CSS.
+       box.style.zoom=scale;
+     }else box.style.zoom='';
+   });
+ });
+}
+window.addEventListener('resize',fitTableToViewport);
+function value(h){let n=0,a=0;for(const c of h){if(c.r==='A'){n+=11;a++}else n+=['J','Q','K'].includes(c.r)?10:+c.r}while(n>21&&a){n-=10;a--}return{n,soft:a>0}}
+function bj(h,splitHand=false){return !splitHand&&h.length===2&&value(h).n===21}
+function displayValue(h){
+ if(!h||!h.length)return '';
+ const v=value(h);
+ if(v.soft)return `${v.n-10} / ${v.n}`;
+ return `${v.n}`;
+}
+
+function sevenTrip(h){return h.length===3&&h.every(c=>c.r==='7')}
+function euro(n){return '€'+Number(n).toLocaleString(undefined,{maximumFractionDigits:2})}
+function card(c,anim=false){let red=c.s==='♥'||c.s==='♦';return `<div class="card ${red?'redc':''} ${anim?'dealing':''}" data-id="${c.id}">${c.r}<div class="s">${c.s}</div></div>`}
+function mkPlayer(name,you=false){let mb=you?placed.main:[5,10,25,50][Math.floor(Math.random()*4)];return{name,you,cash:you?bankroll:500+Math.floor(Math.random()*800),c3:you?placed.c3:(Math.random()<.22?5:0),jacks:you?placed.jacks:(Math.random()<.18?5:0),bust:you?placed.bust:0,sideText:'',hands:[{cards:[],bet:mb,done:false,result:'',split:false,splitAces:false}]}}
+function render(){
+ $('bank').textContent=euro(bankroll);$('shoeN').textContent=shoe.length;
+ $('dealerCards').innerHTML=dealer.map(c=>card(c,lastAnim===`d:${c.id}`)).join('');$('dealerTotal').textContent=dealer.length?displayValue(dealer):'';
+ $('seats').innerHTML=players.map((p,pi)=>`<div class="seat ${p.you?'you':''} ${p.you&&p.hands.length>1?'has-split':''} ${pi===activePlayer?'active':''}"><div class="name">${p.name}</div><div class="cash">${p.you?euro(bankroll):euro(p.cash)}</div><div class="bet">Main ${euro(p.hands.reduce((s,h)=>s+h.bet,0))}</div><div class="side">${p.sideText||[p.c3?'C3 '+euro(p.c3):'',p.jacks?'123 '+euro(p.jacks):'',p.bust?'Bust '+euro(p.bust):''].filter(Boolean).join(' · ')}</div><div class="remote-bets ${p.you?'your-bets':''}">${p.you?`<div class="remote-drop own-main" data-ownbet="main"><small>MAIN</small></div><div class="remote-drop" data-ownbet="c3"><small>C3</small></div><div class="remote-drop" data-ownbet="jacks"><small>123 JACKS</small></div>`:`<div class="remote-drop behind" data-pi="${pi}" data-kind="behind"><small>BET BEHIND</small><strong>${euro(remoteBets[pi].behind)}</strong></div><div class="remote-drop" data-pi="${pi}" data-kind="c3"><small>YOUR C3</small><strong>${euro(remoteBets[pi].c3)}</strong></div><div class="remote-drop" data-pi="${pi}" data-kind="jacks"><small>YOUR 123</small><strong>${euro(remoteBets[pi].jacks)}</strong></div>`}</div>${splitBetStacksHTML(p)}${p.hands.map((h,hi)=>`<div class="hand-wrap ${p.you&&state==='human'&&hi===activeHand?'active-hand':''}"><div class="hand-tag">PLAYING HAND ${hi+1}</div><div class="cards">${h.cards.map(c=>card(c,lastAnim===`${pi}:${hi}:${c.id}`)).join('')}</div><div class="total">${h.cards.length?displayValue(h.cards):''}</div><div class="result">${h.result}</div></div>`).join('')}${p.you&&p.hands.length>1?`<div class="split-progress">Hand ${Math.min(activeHand+1,p.hands.length)} of ${p.hands.length}</div>`:''}</div>`).join('');
+ if(state==='human'){
+ let h=players[2].hands[activeHand],bjAce=bj(h.cards,h.split)&&dealer[0]?.r==='A';
+ let same=h.cards.length===2&&cardValue(h.cards[0])===cardValue(h.cards[1]);
+ $('dealBtn').disabled=true;
+ $('hit').disabled=bjAce||h.done;
+ $('stand').disabled=bjAce||h.done;
+ $('double').disabled=bjAce||h.done||h.cards.length!==2||h.splitAces||bankroll<h.bet;
+ $('split').disabled=bjAce||h.done||!same||bankroll<h.bet||players[2].hands.length>=4;
+ $('payout').disabled=!bjAce;
+ $('hint').textContent=bjAce?'BLACKJACK — choose PAYOUT':'BS: '+moveName(basicMove(h.cards,dealer[0]));
+}else{
+ $('dealBtn').disabled=state!=='bet';
+ $('hit').disabled=true;$('stand').disabled=true;$('double').disabled=true;$('split').disabled=true;$('payout').disabled=true;
+ $('hint').textContent='';
+}bindRemoteDrops();bindOwnBetDrops();paintBetChips();fitTableToViewport();
+}
+function cardValue(c){return c.r==='A'?11:['J','Q','K'].includes(c.r)?10:+c.r}
+async function dealToPlayer(pi,hi=0){let c=draw();SFX.card();players[pi].hands[hi].cards.push(c);lastAnim=`${pi}:${hi}:${c.id}`;render();await sleep(330);lastAnim=null}
+async function dealToDealer(){let c=draw();SFX.card();dealer.push(c);lastAnim=`d:${c.id}`;render();await sleep(330);lastAnim=null}
+function c3(cards){if(cards.every(c=>c.r==='A'&&c.s==='♥'))return['Highest Hearts',300];if(cards.every(c=>c.r==='J'&&['♠','♣'].includes(c.s)))return['Jacks in Black',200];if(cards.every(c=>c.r===cards[0].r))return['Triplets',50];if(cards.every(c=>['♥','♦'].includes(c.s)))return['Red Carpet',4];return['',-1]}
+function jacks(cards){let js=cards.filter(c=>c.r==='J'),sp=js.filter(c=>c.s==='♠').length;if(js.length===3&&sp===3)return['3 Jacks of Spades',300];if(js.length===3)return['3 Jacks',50];if(js.length===2&&sp===2)return['2 Jacks of Spades',20];if(js.length===2)return['2 Jacks',10];if(js.length===1&&sp===1)return['1 Jack of Spades',4];if(js.length===1)return['1 Jack',2];return['',-1]}
+function settleSide(){
+ for(const p of players){
+   let cards=[...p.hands[0].cards,dealer[0]],text=[];
+   for(const [kind,bet,fn] of [['C3',p.c3,c3],['123',p.jacks,jacks]])if(bet){
+     let[n,x]=fn(cards);
+     if(x>=0){let ret=bet*(x+1);p.you?bankroll+=ret:p.cash+=ret;text.push(`${kind} ${n} +${euro(bet*x)}`)}
+     else text.push(`${kind} lost`);
+   }
+   p.sideText=text.join(' · ');
+ }
+ for(let i=0;i<players.length;i++){
+   let rb=remoteBets[i],cards=[...players[i].hands[0].cards,dealer[0]],bits=[];
+   if(rb.c3){let[n,x]=c3(cards);if(x>=0){bankroll+=rb.c3*(x+1);bits.push(`Your C3 ${n} +${euro(rb.c3*x)}`)}else bits.push('Your C3 lost')}
+   if(rb.jacks){let[n,x]=jacks(cards);if(x>=0){bankroll+=rb.jacks*(x+1);bits.push(`Your 123 ${n} +${euro(rb.jacks*x)}`)}else bits.push('Your 123 lost')}
+   if(bits.length)players[i].sideText+=(players[i].sideText?' · ':'')+bits.join(' · ');
+ }
+ // Side bets are fully resolved as soon as all initial cards + dealer up-card exist.
+ placed.c3=0;placed.jacks=0;stacks.c3=[];stacks.jacks=[];
+ for(const rb of remoteBets){rb.c3=0;rb.jacks=0;rb.c3Stack=[];rb.jacksStack=[]}
+ render();paintBetChips();
+}
+async function start(){
+ let vals=[placed.main,placed.c3,placed.jacks,placed.bust];let remoteTotal=remoteBets.reduce((sum,r)=>sum+r.behind+r.c3+r.jacks,0);if(vals[0]<5||vals.reduce((a,b)=>a+b,0)+remoteTotal>bankroll){$('msg').textContent='Check your bets and bankroll.';return}
+ roundStartBankroll=bankroll;pendingDouble=0;bankroll-=vals.reduce((a,b)=>a+b,0)+remoteTotal;players=names.map((n,i)=>mkPlayer(n,i===2));dealer=[];state='dealing';activePlayer=-1;render();$('msg').textContent='Dealing…';
+ // Casinos Austria flow: each box gets two, bank only one.
+ for(let round=0;round<2;round++)for(let i=0;i<players.length;i++)await dealToPlayer(i);
+ await dealToDealer();$('msg').textContent='Initial deal complete — settling C3 / 123Jacks…';render();await sleep(350);settleSide();await sleep(700);
+ // Natural blackjack is paid immediately, except against a dealer Ace.
+ // Against an Ace the player explicitly chooses PAYOUT.
+ if(bj(players[2].hands[0].cards,false)){
+   announceBlackjack();
+   $('msg').textContent=dealer[0].r==='A'?'BLACKJACK — dealer shows Ace. Use the Insurance field or choose PAYOUT.':'BLACKJACK — waiting for the rest of the table.';
+   await sleep(750);
+ }
+ // play boxes in order
+ for(let i=0;i<players.length;i++){activePlayer=i;activeHand=0;render();if(i===2){
+   let h=players[2].hands[0],natural=bj(h.cards,false),ace=dealer[0].r==='A';
+   if(natural&&!ace){h.done=true;h.result='BLACKJACK';$('msg').textContent='BLACKJACK — waiting for the rest of the table.';render();continue}
+   state='human';
+   if(natural&&ace){
+     h.done=true;
+     $('msg').textContent='BLACKJACK — dealer shows Ace. Use the Insurance field or choose PAYOUT.';
+   }else{
+     $('hit').disabled=false;$('stand').disabled=false;$('msg').textContent='Your box — make your decision.';
+   }
+   render();return
+ }else await playAI(i)}
+ await dealerPhase();
+}
+
+function announceBlackjack(){
+ const h=players[2]&&players[2].hands[0];
+ if(!h||!bj(h.cards,h.split))return false;
+ h.done=true;h.result='BLACKJACK';
+ const banner=$('blackjackBanner');banner.classList.remove('show');void banner.offsetWidth;banner.classList.add('show');
+ SFX.blackjack();render();return true;
+}
+async function payoutBlackjack(){
+ const h=players[2]&&players[2].hands[0];
+ if(state!=='human'||dealer[0]?.r!=='A'||!h||!bj(h.cards,h.split))return;
+ h.payoutChosen=true;h.done=true;h.result='BLACKJACK';
+ 
+ $('msg').textContent='BLACKJACK — waiting for the rest of the table.';
+ announceBlackjack();await sleep(450);
+ state='posthuman';
+ for(let i=3;i<players.length;i++){activePlayer=i;render();await playAI(i)}
+ await dealerPhase();
+}
+
+function basicMove(h,up){let v=value(h),u=cardValue(up);if(h.length===2&&cardValue(h[0])===cardValue(h[1])){let r=cardValue(h[0]);if(r===11||r===8)return'P';if(r===10)return'S';if(r===9)return[2,3,4,5,6,8,9].includes(u)?'P':'S';if(r===7)return u<=7?'P':'H';if(r===6)return u<=6?'P':'H';if(r===4)return[5,6].includes(u)?'P':'H';if(r===2||r===3)return u<=7?'P':'H'}if(v.soft){if(v.n>=19)return'S';if(v.n===18)return[3,4,5,6].includes(u)?'D':([2,7,8].includes(u)?'S':'H');if(v.n===17)return[3,4,5,6].includes(u)?'D':'H';if([15,16].includes(v.n))return[4,5,6].includes(u)?'D':'H';if([13,14].includes(v.n))return[5,6].includes(u)?'D':'H'}if(v.n>=17)return'S';if(v.n>=13)return u<=6?'S':'H';if(v.n===12)return[4,5,6].includes(u)?'S':'H';if(v.n===11)return'D';if(v.n===10)return u<=9?'D':'H';if(v.n===9)return[3,4,5,6].includes(u)?'D':'H';return'H'}
+function moveName(m){return({H:'HIT',S:'STAND',D:'DOUBLE',P:'SPLIT'})[m]||m}
+async function playAI(pi){let p=players[pi],h=p.hands[0];$('msg').textContent=`${p.name} is playing…`;await sleep(300);while(!h.done){let m=basicMove(h.cards,dealer[0]);if(m==='S'||m==='P'){h.done=true;break}if(m==='D'&&p.cash>=h.bet){p.cash-=h.bet;h.bet*=2;await dealToPlayer(pi);h.done=true;break}await dealToPlayer(pi);if(sevenTrip(h.cards)){h.result='TRIPLE 7';p.cash+=h.bet*2.5;h.done=true}else if(value(h.cards).n>=21)h.done=true;render();await sleep(180)}render();await sleep(250)}
+async function hitHuman(){let h=players[2].hands[activeHand];await dealToPlayer(2,activeHand);if(sevenTrip(h.cards)){h.result='TRIPLE 7';bankroll+=h.bet*2.5;h.done=true}else if(value(h.cards).n>=21)h.done=true;render();if(h.done)nextHuman()}
+function standHuman(){if(pendingDouble){bankroll+=pendingDouble;pendingDouble=0}players[2].hands[activeHand].done=true;nextHuman()}
+async function doubleHuman(){let h=players[2].hands[activeHand];if(h.cards.length!==2||h.splitAces||bankroll<h.bet)return;bankroll-=h.bet;h.bet*=2;await dealToPlayer(2,activeHand);h.done=true;nextHuman()}
+async function splitHuman(){let p=players[2],h=p.hands[activeHand];if(h.cards.length!==2||cardValue(h.cards[0])!==cardValue(h.cards[1])||bankroll<h.bet||p.hands.length>=4)return;bankroll-=h.bet;let ace=cardValue(h.cards[0])===11,c=h.cards.pop(),nh={cards:[c],bet:h.bet,done:false,result:'',split:true,splitAces:ace};h.split=true;h.splitAces=ace;p.hands.splice(activeHand+1,0,nh);await dealToPlayer(2,activeHand);await dealToPlayer(2,activeHand+1);if(ace){h.done=nh.done=true;nextHuman()}else $('msg').textContent=`Your turn — playing split hand ${activeHand+1} of ${p.hands.length}.`;render()}
+async function nextHuman(){let p=players[2];for(let i=activeHand+1;i<p.hands.length;i++)if(!p.hands[i].done){pendingDouble=0;activeHand=i;$('msg').textContent=`Your turn — playing split hand ${i+1} of ${p.hands.length}.`;render();return}state='posthuman';for(let i=3;i<players.length;i++){activePlayer=i;render();await playAI(i)}await dealerPhase()}
+async function dealerPhase(){activePlayer=-1;state='dealer';$('msg').textContent='All boxes are finished — dealer draws now.';render();await sleep(450);await dealToDealer();while(value(dealer).n<17){await sleep(280);await dealToDealer()}settleMain();state='done';render();$('msg').textContent=value(dealer).n>21?'Dealer busts.':'Round complete.';await sleep(900);$('bets').hidden=false;state='bet';$('msg').textContent='Place your next bets.';
+ players=names.map((n,i)=>mkPlayer(n,i===2));players.forEach(p=>{p.hands[0].cards=[];p.hands[0].bet=p.you?placed.main:0;p.c3=0;p.jacks=0;p.bust=0;p.sideText=''});
+ dealer=[];activePlayer=-1;activeHand=0;render();updateBets()}
+function settleMain(){let dv=value(dealer).n,dbj=bj(dealer);for(const p of players){for(const h of p.hands){if(h.result==='TRIPLE 7')continue;let pv=value(h.cards).n,ret=0;
+     if(p.you&&h.payoutChosen&&bj(h.cards,h.split)){ret=h.bet*2.5;h.result='BLACKJACK';bankroll+=ret;continue}if(pv>21)h.result='BUST';else if(bj(h.cards,h.split)&&!dbj){ret=h.bet*2.5;h.result='BLACKJACK'}else if(dbj&&!bj(h.cards,h.split))h.result='LOSE';else if(dv>21||pv>dv){ret=h.bet*2;h.result='WIN'}else if(pv===dv){ret=h.bet;h.result='STAND-OFF'}else h.result='LOSE';p.you?bankroll+=ret:p.cash+=ret}if(p.bust){if(dv>21){let ret=p.bust*3;p.you?bankroll+=ret:p.cash+=ret;p.sideText+=(p.sideText?' · ':'')+`Bust +${euro(p.bust*2)}`}else p.sideText+=(p.sideText?' · ':'')+'Bust lost'}const pi=players.indexOf(p),bb=remoteBets[pi].behind;if(bb){let per=bb/p.hands.length,totalReturn=0;for(const h of p.hands){if(h.result==='BLACKJACK')totalReturn+=per*2.5;else if(h.result==='WIN'||h.result==='TRIPLE 7')totalReturn+=per*2;else if(h.result==='STAND-OFF')totalReturn+=per}bankroll+=totalReturn;let profit=totalReturn-bb;p.sideText+=(p.sideText?' · ':'')+(profit>0?`Behind +${euro(profit)}`:profit===0?'Behind push':'Behind lost')}}}
+async function insure(){let p=players[2],max=Math.min(p.hands[0].bet*2,bankroll),amt=Math.min(p.hands[0].bet/2,max);if(amt<=0)return;bankroll-=amt;p.insurance=amt;$('msg').textContent=`Insurance ${euro(amt)} placed (2:1). You can now take PAYOUT.`;render()}
+/* Insurance is resolved when dealer's second card arrives. */
+const oldDealerPhase=dealerPhase;dealerPhase=async function(){activePlayer=-1;state='dealer';$('msg').textContent='All boxes are finished — dealer draws now.';render();await sleep(450);await dealToDealer();let p=players[2];if(p.insurance){if(bj(dealer)){bankroll+=p.insurance*3;p.sideText+=(p.sideText?' · ':'')+`Insurance +${euro(p.insurance*2)}`}else p.sideText+=(p.sideText?' · ':'')+'Insurance lost';placed.insurance=0;stacks.insurance=[];render();paintBetChips()}while(value(dealer).n<17){await sleep(280);await dealToDealer()}settleMain();state='done';render();let net=bankroll-roundStartBankroll;let result=net>0?`You won ${euro(net)} this round.`:net<0?`You lost ${euro(Math.abs(net))} this round.`:'You broke even this round.';if(net>0){let yours=players[2].hands;if(yours.some(h=>h.result==='BLACKJACK'))SFX.blackjack();else SFX.win()}else if(net<0)SFX.lose();$('msg').textContent=(value(dealer).n>21?'Dealer busts — ':'')+result;await sleep(2200);$('bets').hidden=false;state='bet';$('msg').textContent=result+' Place your next bets.';
+ players=names.map((n,i)=>mkPlayer(n,i===2));players.forEach(p=>{p.hands[0].cards=[];p.hands[0].bet=p.you?placed.main:0;p.c3=0;p.jacks=0;p.bust=0;p.sideText=''});
+ dealer=[];activePlayer=-1;activeHand=0;render();updateBets()}
+
+
+function chipsForAmount(amount){
+ const out=[];
+ for(const v of [100,50,25,10,5]){
+   while(amount>=v){out.push(v);amount-=v}
+ }
+ return out;
+}
+function splitBetStacksHTML(p){
+ if(!p.you||p.hands.length<2)return '';
+ return `<div class="split-chip-row">${p.hands.map((h,hi)=>
+   `<div class="split-chip-pile ${state==='human'&&hi===activeHand?'active-split-bet':''}" title="Hand ${hi+1}: ${euro(h.bet)}">${chipStackHTML(chipsForAmount(h.bet))}</div>`
+ ).join('')}</div>`;
+}
+function chipStackHTML(values){
+ if(!values||!values.length)return '';
+ return `<div class="table-chip-stack">${values.map((v,i)=>{
+   const visibleStart=Math.max(0,values.length-7),vis=Math.max(0,i-visibleStart);
+   if(i<visibleStart)return '';
+   return `<span class="table-chip c${v}" style="--chip-y:${-vis*4}px;z-index:${i+1}">${v}</span>`;
+ }).join('')}</div>`;
+}
+function paintBetChips(){
+ document.querySelectorAll('.dropbet').forEach(z=>{
+   const k=z.dataset.bet;
+   let old=z.querySelector('.table-chip-stack');if(old)old.remove();
+   z.insertAdjacentHTML('beforeend',chipStackHTML(stacks[k]||[]));
+ });
+ document.querySelectorAll('[data-ownbet]').forEach(z=>{let k=z.dataset.ownbet,old=z.querySelector('.table-chip-stack');if(old)old.remove();if(k==='main'&&players[2]?.hands?.length>1)return;z.insertAdjacentHTML('beforeend',chipStackHTML(stacks[k]||[]))});document.querySelectorAll('.remote-drop[data-pi]').forEach(z=>{
+   const r=remoteBets[+z.dataset.pi],k=z.dataset.kind;
+   let old=z.querySelector('.table-chip-stack');if(old)old.remove();
+   if(r)z.insertAdjacentHTML('beforeend',chipStackHTML(r[k+'Stack']||[]));
+ });
+}
+function updateBets(){
+ const total=placed.main+placed.c3+placed.jacks+placed.bust+remoteBets.reduce((sum,r)=>sum+r.behind+r.c3+r.jacks,0);
+ $('dealBtn').disabled=placed.main<5||total>bankroll;
+ $('msg').textContent=total>bankroll?'Not enough bankroll.':placed.main<5?'Drag at least €5 to MAIN.':`Total wager: ${euro(total)}`;
+ paintBetChips();
+}
+document.querySelectorAll('.chip').forEach(chip=>{
+ chip.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',chip.dataset.value);e.dataTransfer.effectAllowed='copy'});
+ // Click/tap fallback: clicking a chip selects it, then clicking a circle adds it.
+ chip.addEventListener('click',()=>{document.querySelectorAll('.chip').forEach(x=>x.style.outline='');chip.style.outline='3px solid #ffe696';document.body.dataset.selectedChip=chip.dataset.value});
+});
+document.querySelectorAll('.dropbet').forEach(zone=>{
+ zone.addEventListener('dragover',e=>{e.preventDefault();e.dataTransfer.dropEffect='copy';zone.classList.add('dragover')});
+ zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
+ zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');let v=+e.dataTransfer.getData('text/plain');addChip(zone.dataset.bet,v)});
+ zone.addEventListener('click',()=>{
+   let sel=+document.body.dataset.selectedChip;
+   if(sel){addChip(zone.dataset.bet,sel);return}
+   let k=zone.dataset.bet,v=stacks[k].pop();if(v){placed[k]-=v;updateBets()}
+ });
+ zone.addEventListener('contextmenu',e=>{e.preventDefault();let k=zone.dataset.bet,v=stacks[k].pop();if(v){placed[k]-=v;updateBets()}});
+});
+function addChip(kind,v){
+ if(state!=='bet'||![5,10,25,50,100].includes(v))return;
+ placed[kind]+=v;stacks[kind].push(v);SFX.chip();updateBets();
+}
+function bindOwnBetDrops(){
+ document.querySelectorAll('[data-ownbet]').forEach(z=>{
+   const kind=z.dataset.ownbet,insurance=kind==='insurance',main=kind==='main';
+   const doubleAllowed=()=>{
+     if(!main||state!=='human')return false;
+     const h=players[2]?.hands?.[activeHand];
+     return !!h&&!h.done&&!h.splitAces&&h.cards.length===2&&!bj(h.cards,h.split)&&bankroll>=h.bet;
+   };
+   const allowed=()=>insurance?(state==='human'&&dealer[0]?.r==='A'):(state==='bet'||doubleAllowed());
+   if(main&&doubleAllowed())z.classList.add('double-ready');else z.classList.remove('double-ready');
+   z.ondragover=e=>{if(!allowed())return;e.preventDefault();z.classList.add('dragover')};
+   z.ondragleave=()=>z.classList.remove('dragover');
+   z.ondrop=e=>{
+     e.preventDefault();z.classList.remove('dragover');if(!allowed())return;
+     let v=+e.dataTransfer.getData('text/plain');
+     if(insurance){addInsuranceChip(v);return}
+     if(main&&state==='human'){addDoubleChip(v);return}
+     addChip(kind,v);render()
+   };
+   z.onclick=()=>{
+     if(!allowed())return;
+     let v=+document.body.dataset.selectedChip;
+     if(v){
+       if(insurance)addInsuranceChip(v);
+       else if(main&&state==='human')addDoubleChip(v);
+       else{addChip(kind,v);render()}
+       return
+     }
+     if(state!=='bet')return;
+     let x=stacks[kind].pop();if(x){placed[kind]-=x;SFX.chip();updateBets();render()}
+   };
+   z.oncontextmenu=e=>{
+     // Right-click is reserved for the simultaneous L+R split gesture while playing.
+     if(state==='human')return;
+     e.preventDefault();if(!allowed())return;
+     let x=stacks[kind].pop();if(x){placed[kind]-=x;SFX.chip();updateBets();render()}
+   };
+ });
+}
+let pendingDouble=0;
+async function addDoubleChip(v){
+ const h=players[2]?.hands?.[activeHand];
+ if(!h||h.done||h.cards.length!==2||h.splitAces||bj(h.cards,h.split))return;
+ if(![5,10,25,50,100].includes(v)||v>bankroll)return;
+ // Chips are accumulated until they exactly match the active hand's original wager.
+ if(pendingDouble+v>h.bet){$('msg').textContent=`Double requires exactly ${euro(h.bet)} in additional chips.`;return}
+ bankroll-=v;pendingDouble+=v;SFX.chip();
+ $('msg').textContent=`Double: ${euro(pendingDouble)} / ${euro(h.bet)} added.`;
+ if(pendingDouble===h.bet){
+   pendingDouble=0;h.bet*=2;render();SFX.click();
+   await dealToPlayer(2,activeHand);h.done=true;nextHuman()
+ }else render()
+}
+function bindRemoteDrops(){document.querySelectorAll('.remote-drop').forEach(z=>{z.ondragover=e=>{if(state!=='bet')return;e.preventDefault();z.classList.add('dragover')};z.ondragleave=()=>z.classList.remove('dragover');z.ondrop=e=>{e.preventDefault();z.classList.remove('dragover');addRemoteChip(+z.dataset.pi,z.dataset.kind,+e.dataTransfer.getData('text/plain'))};z.onclick=()=>{if(state!=='bet')return;let v=+document.body.dataset.selectedChip;if(v)addRemoteChip(+z.dataset.pi,z.dataset.kind,v);else removeRemoteChip(+z.dataset.pi,z.dataset.kind)};z.oncontextmenu=e=>{e.preventDefault();removeRemoteChip(+z.dataset.pi,z.dataset.kind)}})}function addRemoteChip(pi,k,v){if(state!=='bet'||![5,10,25,50,100].includes(v)||!remoteBets[pi])return;remoteBets[pi][k]+=v;remoteBets[pi][k+'Stack'].push(v);SFX.chip();updateBets();render()}function removeRemoteChip(pi,k){if(state!=='bet'||!remoteBets[pi])return;let v=remoteBets[pi][k+'Stack'].pop();if(v){remoteBets[pi][k]-=v;SFX.chip();updateBets();render()}}
+function bs(){let cols=['2','3','4','5','6','7','8','9','10','A'],rows=[];for(let n=5;n<=17;n++){let r=cols.map(us=>{let u=us==='A'?11:+us;if(n>=17)return'S';if(n>=13)return u<=6?'S':'H';if(n===12)return[4,5,6].includes(u)?'S':'H';if(n===11)return'D';if(n===10)return u<=9?'D':'H';if(n===9)return[3,4,5,6].includes(u)?'D':'H';return'H'});rows.push([n,...r])}$('bsTable').innerHTML=`<table><tr><th>Hard</th>${cols.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr><th>${r[0]}</th>${r.slice(1).map(x=>`<td class="${x}">${x}</td>`).join('')}</tr>`).join('')}</table><p>H = Hit · S = Stand · D = Double · P = Split. The live recommendation beside the action buttons also handles soft hands and pairs.</p>`}
+
+let tableGesture=null;
+const gameTable=$('gameTable');
+function gestureCanPlay(){
+ if(state!=='human'||activePlayer!==2)return false;
+ const h=players[2]?.hands?.[activeHand];
+ return !!h&&!h.done&&!bj(h.cards,h.split);
+}
+function gesturePoint(e){
+ const t=e.changedTouches?.[0]||e.touches?.[0]||e;
+ return {x:t.clientX,y:t.clientY};
+}
+function gestureStart(e){
+ if(!gestureCanPlay())return;
+ // Don't steal gestures that begin on controls, chips, betting fields or cards.
+ if(e.target.closest('button,.chip,.remote-drop,.arc-bet,.card,.controls,.modal'))return;
+ const p=gesturePoint(e);
+ tableGesture={x:p.x,y:p.y,time:performance.now(),moved:false};
+}
+function gestureMove(e){
+ if(!tableGesture)return;
+ const p=gesturePoint(e),dx=p.x-tableGesture.x,dy=p.y-tableGesture.y;
+ if(Math.hypot(dx,dy)>18)tableGesture.moved=true;
+}
+function gestureEnd(e){
+ if(!tableGesture)return;
+ const g=tableGesture;tableGesture=null;
+ if(!gestureCanPlay())return;
+ const p=gesturePoint(e),dx=p.x-g.x,dy=p.y-g.y,dist=Math.hypot(dx,dy),elapsed=performance.now()-g.time;
+ // A deliberate swipe in any direction across the felt means Stand.
+ if(dist>=70&&elapsed<=900){
+   e.preventDefault();SFX.click();standHuman();return;
+ }
+}
+gameTable.addEventListener('pointerdown',gestureStart);
+gameTable.addEventListener('pointermove',gestureMove);
+gameTable.addEventListener('pointerup',gestureEnd);
+gameTable.addEventListener('pointercancel',()=>tableGesture=null);
+
+// Double click anywhere on unused felt = Hit.
+
+let splitButtons=0,splitComboFired=false;
+function canGestureSplit(){
+ if(state!=='human'||activePlayer!==2)return false;
+ const p=players[2],h=p?.hands?.[activeHand];
+ return !!h&&!h.done&&h.cards.length===2&&cardValue(h.cards[0])===cardValue(h.cards[1])&&bankroll>=h.bet&&p.hands.length<4&&!bj(h.cards,h.split);
+}
+gameTable.addEventListener('mousedown',e=>{
+ if(e.target.closest('button,.chip,.remote-drop,.arc-bet,.controls,.modal'))return;
+ splitButtons=e.buttons;
+ if((e.buttons&1)&&(e.buttons&2)&&canGestureSplit()&&!splitComboFired){
+   e.preventDefault();splitComboFired=true;SFX.click();splitHuman()
+ }
+});
+gameTable.addEventListener('mousemove',e=>{
+ if((e.buttons&1)&&(e.buttons&2)&&canGestureSplit()&&!splitComboFired){
+   e.preventDefault();splitComboFired=true;SFX.click();splitHuman()
+ }
+});
+gameTable.addEventListener('mouseup',e=>{splitButtons=e.buttons;if(!(e.buttons&1)||!(e.buttons&2))splitComboFired=false});
+gameTable.addEventListener('contextmenu',e=>{
+ if(state==='human'&&e.target.closest('#gameTable'))e.preventDefault()
+});
+gameTable.addEventListener('dblclick',e=>{
+ if(!gestureCanPlay())return;
+ if(e.target.closest('button,.chip,.remote-drop,.arc-bet,.card,.controls,.modal'))return;
+ e.preventDefault();
+ gameTable.classList.remove('gesture-hit');void gameTable.offsetWidth;gameTable.classList.add('gesture-hit');
+ SFX.click();hitHuman();
+});
+$('dealBtn').onclick=()=>{SFX.click();start()};$('hit').onclick=()=>{SFX.click();hitHuman()};$('stand').onclick=()=>{SFX.click();standHuman()};$('double').onclick=()=>{SFX.click();doubleHuman()};$('split').onclick=()=>{SFX.click();splitHuman()};$('payout').onclick=()=>{SFX.click();payoutBlackjack()};$('soundBtn').onclick=()=>{sfxOn=!sfxOn;$('soundBtn').textContent=sfxOn?'🔊 SFX':'🔇 SFX';if(sfxOn){ac();SFX.click()}};$('bsBtn').onclick=()=>{$('bsModal').classList.add('show');bs()};$('closeBS').onclick=()=>$('bsModal').classList.remove('show');
+newShoe();
+players=names.map((n,i)=>mkPlayer(n,i===2));
+players.forEach(p=>{p.hands[0].cards=[];p.hands[0].bet=p.you?placed.main:0;p.c3=0;p.jacks=0;p.bust=0;p.sideText=''});
+render();updateBets();
+</script></body></html>
