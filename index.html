@@ -1089,7 +1089,7 @@ header{
     max-height:none !important;
     padding:3px max(5px,env(safe-area-inset-right)) max(3px,env(safe-area-inset-bottom)) max(5px,env(safe-area-inset-left)) !important;
     grid-template-rows:88px 42px minmax(0,1fr) auto !important;
-    touch-action:pan-x;
+    touch-action:none;
   }
   .table:before{
     inset:4px !important;
@@ -1142,52 +1142,49 @@ header{
   .bust-center{top:5px !important;width:74px !important;height:29px !important;font-size:9px !important}
   .insurance-pays{top:-1px !important;font-size:5px !important;letter-spacing:.6px !important}
 
-  /* Seats become a native horizontal strip. YOU is first so every render opens
-     on the player's own box; all four other boxes remain swipe-accessible. */
+  /* All five boxes remain visible. The compact two-row arrangement avoids
+     horizontal page or table scrolling while preserving every betting spot. */
   .seats{
     grid-row:3 !important;
-    display:flex !important;
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    grid-template-rows:repeat(2,minmax(0,1fr)) !important;
     width:100% !important;
     max-width:none !important;
     height:100% !important;
     min-height:0 !important;
     margin:0 !important;
-    padding:3px 7vw 5px !important;
-    gap:10px !important;
-    align-items:center !important;
-    justify-content:flex-start !important;
-    overflow-x:auto !important;
+    padding:2px 1px 4px !important;
+    gap:3px !important;
+    align-items:stretch !important;
+    justify-items:stretch !important;
+    overflow-x:hidden !important;
     overflow-y:hidden !important;
-    scroll-snap-type:x mandatory;
-    scroll-padding-inline:7vw;
-    scrollbar-width:none;
-    overscroll-behavior-x:contain;
-    touch-action:pan-x;
-    -webkit-overflow-scrolling:touch;
+    touch-action:none;
   }
-  .seats::-webkit-scrollbar{display:none}
   .seat{
-    flex:0 0 min(82vw,320px) !important;
-    width:min(82vw,320px) !important;
-    max-width:320px !important;
-    max-height:calc(100% - 4px) !important;
+    width:100% !important;
+    max-width:none !important;
+    max-height:100% !important;
     min-width:0 !important;
-    align-self:center !important;
-    justify-self:auto !important;
-    padding:6px 7px !important;
+    align-self:stretch !important;
+    justify-self:stretch !important;
+    padding:3px 2px !important;
     transform:none !important;
     transform-origin:center !important;
-    scroll-snap-align:center;
-    scroll-snap-stop:always;
     overflow:hidden !important;
     background:rgba(0,26,16,.35);
-    border-radius:42% 42% 14px 14px;
+    border-radius:28% 28% 9px 9px;
   }
-  .seat.you{order:-1;max-width:340px !important}
+  .seat:nth-child(1){grid-column:1;grid-row:1}
+  .seat:nth-child(2){grid-column:3;grid-row:1}
+  .seat:nth-child(3){grid-column:2;grid-row:2}
+  .seat:nth-child(4){grid-column:1;grid-row:2}
+  .seat:nth-child(5){grid-column:3;grid-row:2}
+  .seat.you{order:0;max-width:none !important}
   .seat.you.has-split{
-    flex-basis:92vw !important;
-    width:92vw !important;
-    max-width:390px !important;
+    width:100% !important;
+    max-width:none !important;
   }
   .seat.active{
     transform:none !important;
@@ -1287,7 +1284,7 @@ header{
     text-align:right;
   }
   .gesture-hint:after{
-    content:"Tap a chip, then a betting circle · Swipe seats";
+    content:"Double tap: Hit · Swipe: Stand";
     font-size:7px;
     line-height:9px;
   }
@@ -1346,7 +1343,7 @@ header{
     height:100% !important;
     padding:2px max(5px,env(safe-area-inset-right)) max(2px,env(safe-area-inset-bottom)) max(5px,env(safe-area-inset-left)) !important;
     grid-template-rows:64px 28px minmax(0,1fr) auto !important;
-    touch-action:pan-x;
+    touch-action:none;
   }
   .dealer{grid-row:1 !important;height:64px !important;transform:none !important}
   .dealer .cards{min-height:45px !important}
@@ -1361,34 +1358,32 @@ header{
   .bust-center{top:3px !important;width:64px !important;height:22px !important;font-size:7px !important}
   .seats{
     grid-row:3 !important;
-    display:flex !important;
+    display:grid !important;
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    grid-template-rows:minmax(0,1fr) !important;
     width:100% !important;
     max-width:none !important;
     height:100% !important;
-    padding:2px 4vw !important;
-    gap:7px !important;
-    align-items:center !important;
-    justify-content:flex-start !important;
-    overflow-x:auto !important;
+    padding:2px 1px !important;
+    gap:3px !important;
+    align-items:stretch !important;
+    justify-items:stretch !important;
+    overflow-x:hidden !important;
     overflow-y:hidden !important;
-    scroll-snap-type:x mandatory;
-    scrollbar-width:none;
-    touch-action:pan-x;
+    touch-action:none;
   }
-  .seats::-webkit-scrollbar{display:none}
   .seat{
-    flex:0 0 min(36vw,250px) !important;
-    width:min(36vw,250px) !important;
-    max-width:250px !important;
-    max-height:calc(100% - 2px) !important;
+    width:100% !important;
+    max-width:none !important;
+    max-height:100% !important;
     min-width:0 !important;
     padding:3px 4px !important;
     transform:none !important;
-    scroll-snap-align:center;
     overflow:hidden !important;
   }
-  .seat.you{order:-1}
-  .seat.you.has-split{flex-basis:min(48vw,360px) !important;width:min(48vw,360px) !important;max-width:360px !important}
+  .seats .seat:nth-child(n){grid-column:auto;grid-row:auto}
+  .seat.you{order:0}
+  .seat.you.has-split{width:100% !important;max-width:none !important}
   .name{font-size:9px}.cash,.bet,.side{font-size:7px}.side{min-height:14px}
   .remote-bets{grid-template-columns:repeat(3,minmax(0,1fr));max-width:220px !important}
   .remote-drop,.seat.you .your-bets .remote-drop,.seat.you .your-bets .own-main{min-height:25px !important;height:25px !important}
@@ -1754,45 +1749,66 @@ async function addDoubleChip(v){
 function bindRemoteDrops(){document.querySelectorAll('.remote-drop').forEach(z=>{z.ondragover=e=>{if(state!=='bet')return;e.preventDefault();z.classList.add('dragover')};z.ondragleave=()=>z.classList.remove('dragover');z.ondrop=e=>{e.preventDefault();z.classList.remove('dragover');addRemoteChip(+z.dataset.pi,z.dataset.kind,+e.dataTransfer.getData('text/plain'))};z.onclick=()=>{if(state!=='bet')return;let v=+document.body.dataset.selectedChip;if(v)addRemoteChip(+z.dataset.pi,z.dataset.kind,v);else removeRemoteChip(+z.dataset.pi,z.dataset.kind)};z.oncontextmenu=e=>{e.preventDefault();removeRemoteChip(+z.dataset.pi,z.dataset.kind)}})}function addRemoteChip(pi,k,v){if(state!=='bet'||![5,10,25,50,100].includes(v)||!remoteBets[pi])return;remoteBets[pi][k]+=v;remoteBets[pi][k+'Stack'].push(v);SFX.chip();updateBets();render()}function removeRemoteChip(pi,k){if(state!=='bet'||!remoteBets[pi])return;let v=remoteBets[pi][k+'Stack'].pop();if(v){remoteBets[pi][k]-=v;SFX.chip();updateBets();render()}}
 function bs(){let cols=['2','3','4','5','6','7','8','9','10','A'],rows=[];for(let n=5;n<=17;n++){let r=cols.map(us=>{let u=us==='A'?11:+us;if(n>=17)return'S';if(n>=13)return u<=6?'S':'H';if(n===12)return[4,5,6].includes(u)?'S':'H';if(n===11)return'D';if(n===10)return u<=9?'D':'H';if(n===9)return[3,4,5,6].includes(u)?'D':'H';return'H'});rows.push([n,...r])}$('bsTable').innerHTML=`<table><tr><th>Hard</th>${cols.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr><th>${r[0]}</th>${r.slice(1).map(x=>`<td class="${x}">${x}</td>`).join('')}</tr>`).join('')}</table><p>H = Hit · S = Stand · D = Double · P = Split. The live recommendation beside the action buttons also handles soft hands and pairs.</p>`}
 
-let tableGesture=null;
+let tableGesture=null,lastTableTap=null;
 const gameTable=$('gameTable');
+const gestureBlockedSelector='button,.chip,.remote-drop,.arc-bet,.controls,.modal';
 function gestureCanPlay(){
  if(state!=='human'||activePlayer!==2)return false;
  const h=players[2]?.hands?.[activeHand];
  return !!h&&!h.done&&!bj(h.cards,h.split);
 }
 function gesturePoint(e){
- const t=e.changedTouches?.[0]||e.touches?.[0]||e;
- return {x:t.clientX,y:t.clientY};
+ return {x:e.clientX,y:e.clientY};
+}
+function gestureTargetBlocked(target){
+ return target instanceof Element&&!!target.closest(gestureBlockedSelector);
+}
+function runGestureHit(){
+ gameTable.classList.remove('gesture-hit');void gameTable.offsetWidth;gameTable.classList.add('gesture-hit');
+ SFX.click();hitHuman();
+}
+function clearTableGesture(){
+ const g=tableGesture;tableGesture=null;lastTableTap=null;
+ if(g)try{gameTable.releasePointerCapture(g.pointerId)}catch{}
 }
 function gestureStart(e){
- if(!gestureCanPlay())return;
- // Don't steal gestures that begin on controls, chips, betting fields or cards.
- if(e.target.closest('button,.chip,.remote-drop,.arc-bet,.card,.controls,.modal'))return;
+ if(e.button!==undefined&&e.button!==0)return;
+ if(!gestureCanPlay()||gestureTargetBlocked(e.target)){lastTableTap=null;return}
  const p=gesturePoint(e);
- tableGesture={x:p.x,y:p.y,time:performance.now(),moved:false};
+ tableGesture={pointerId:e.pointerId,pointerType:e.pointerType||'mouse',x:p.x,y:p.y,time:performance.now()};
+ try{gameTable.setPointerCapture(e.pointerId)}catch{}
 }
 function gestureMove(e){
- if(!tableGesture)return;
- const p=gesturePoint(e),dx=p.x-tableGesture.x,dy=p.y-tableGesture.y;
- if(Math.hypot(dx,dy)>18)tableGesture.moved=true;
+ if(!tableGesture||e.pointerId!==tableGesture.pointerId)return;
 }
 function gestureEnd(e){
- if(!tableGesture)return;
+ if(!tableGesture||e.pointerId!==tableGesture.pointerId)return;
  const g=tableGesture;tableGesture=null;
+ try{gameTable.releasePointerCapture(e.pointerId)}catch{}
  if(!gestureCanPlay())return;
  const p=gesturePoint(e),dx=p.x-g.x,dy=p.y-g.y,dist=Math.hypot(dx,dy),elapsed=performance.now()-g.time;
- // A deliberate swipe in any direction across the felt means Stand.
- if(dist>=70&&elapsed<=900){
-   e.preventDefault();SFX.click();standHuman();return;
+ // A deliberate swipe/drag in any direction means Stand on mouse, pen and touch.
+ const swipeDistance=g.pointerType==='mouse'?65:48;
+ if(dist>=swipeDistance&&elapsed<=1000){
+   lastTableTap=null;e.preventDefault();SFX.click();standHuman();return;
  }
+ // Pointer Events do not reliably emit dblclick on phones, so detect the same
+ // two-tap gesture ourselves for every pointer type.
+ if(dist>18||elapsed>450){lastTableTap=null;return}
+ const now=performance.now();
+ if(lastTableTap&&lastTableTap.pointerType===g.pointerType&&now-lastTableTap.time<=360&&Math.hypot(p.x-lastTableTap.x,p.y-lastTableTap.y)<=38){
+   lastTableTap=null;e.preventDefault();runGestureHit();return;
+ }
+ lastTableTap={x:p.x,y:p.y,time:now,pointerType:g.pointerType};
+}
+function gestureCancel(e){
+ if(!tableGesture||e.pointerId!==tableGesture.pointerId)return;
+ clearTableGesture();
 }
 gameTable.addEventListener('pointerdown',gestureStart);
 gameTable.addEventListener('pointermove',gestureMove);
 gameTable.addEventListener('pointerup',gestureEnd);
-gameTable.addEventListener('pointercancel',()=>tableGesture=null);
-
-// Double click anywhere on unused felt = Hit.
+gameTable.addEventListener('pointercancel',gestureCancel);
 
 let splitButtons=0,splitComboFired=false;
 function canGestureSplit(){
@@ -1804,24 +1820,17 @@ gameTable.addEventListener('mousedown',e=>{
  if(e.target.closest('button,.chip,.remote-drop,.arc-bet,.controls,.modal'))return;
  splitButtons=e.buttons;
  if((e.buttons&1)&&(e.buttons&2)&&canGestureSplit()&&!splitComboFired){
-   e.preventDefault();splitComboFired=true;SFX.click();splitHuman()
+   e.preventDefault();clearTableGesture();splitComboFired=true;SFX.click();splitHuman()
  }
 });
 gameTable.addEventListener('mousemove',e=>{
  if((e.buttons&1)&&(e.buttons&2)&&canGestureSplit()&&!splitComboFired){
-   e.preventDefault();splitComboFired=true;SFX.click();splitHuman()
+   e.preventDefault();clearTableGesture();splitComboFired=true;SFX.click();splitHuman()
  }
 });
 gameTable.addEventListener('mouseup',e=>{splitButtons=e.buttons;if(!(e.buttons&1)||!(e.buttons&2))splitComboFired=false});
 gameTable.addEventListener('contextmenu',e=>{
  if(state==='human'&&e.target.closest('#gameTable'))e.preventDefault()
-});
-gameTable.addEventListener('dblclick',e=>{
- if(!gestureCanPlay())return;
- if(e.target.closest('button,.chip,.remote-drop,.arc-bet,.card,.controls,.modal'))return;
- e.preventDefault();
- gameTable.classList.remove('gesture-hit');void gameTable.offsetWidth;gameTable.classList.add('gesture-hit');
- SFX.click();hitHuman();
 });
 $('dealBtn').onclick=()=>{SFX.click();start()};$('hit').onclick=()=>{SFX.click();hitHuman()};$('stand').onclick=()=>{SFX.click();standHuman()};$('double').onclick=()=>{SFX.click();doubleHuman()};$('split').onclick=()=>{SFX.click();splitHuman()};$('payout').onclick=()=>{SFX.click();payoutBlackjack()};$('soundBtn').onclick=()=>{sfxOn=!sfxOn;$('soundBtn').textContent=sfxOn?'🔊 SFX':'🔇 SFX';if(sfxOn){ac();SFX.click()}};$('bsBtn').onclick=()=>{$('bsModal').classList.add('show');bs()};$('closeBS').onclick=()=>$('bsModal').classList.remove('show');
 newShoe();
