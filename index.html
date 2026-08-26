@@ -1414,6 +1414,222 @@ header{
   #bets .hint,.gesture-hint{display:none !important}
 }
 
+/* === PLAYER-FOCUSED TABLE HIERARCHY ===
+   The human hand is the visual anchor; AI boxes stay fully functional but
+   deliberately compact so the cards that matter are easy to read. */
+@media (min-width:701px){
+  .seats{
+    grid-template-columns:minmax(0,.8fr) minmax(0,.8fr) minmax(260px,1.4fr) minmax(0,.8fr) minmax(0,.8fr) !important;
+  }
+  .seat:not(.you){
+    max-width:195px !important;
+    transform:scale(.86) !important;
+    transform-origin:center center !important;
+  }
+  .seat.you{
+    max-width:360px !important;
+    transform:none !important;
+    overflow:visible !important;
+    z-index:6;
+  }
+  .seat:not(.you) .card{
+    width:47px;
+    height:67px;
+    font-size:14px;
+    margin-left:-14px;
+  }
+  .seat:not(.you) .card .s{font-size:18px}
+  .seat.you:not(.has-split) .hand-wrap{max-width:340px;width:100%}
+  .seat.you .cards{
+    min-height:96px !important;
+    max-width:100%;
+    overflow:visible;
+  }
+  .seat.you .card{
+    width:66px;
+    height:92px;
+    font-size:20px;
+    margin-left:-13px;
+  }
+  .seat.you .card .s{font-size:26px}
+  .seat.you .cards:has(.card:nth-child(6)) .card{margin-left:-22px}
+  .seat.you .cards .card:first-child{margin-left:0}
+  .seat.you.has-split .card{width:50px;height:72px;font-size:15px}
+  .seat.you.has-split .card .s{font-size:20px}
+  .seat.you .total{font-size:16px}
+}
+
+/* Portrait phones: the player occupies the large central box while the four
+   AI players sit in compact corner boxes. Nothing scrolls horizontally. */
+@media (max-width:700px) and (orientation:portrait){
+  .seats{
+    grid-template-columns:minmax(0,.72fr) minmax(0,1fr) minmax(0,1fr) minmax(0,.72fr) !important;
+    grid-template-rows:repeat(2,minmax(0,1fr)) !important;
+    gap:3px !important;
+    overflow:hidden !important;
+  }
+  .seat:nth-child(1){grid-column:1;grid-row:1}
+  .seat:nth-child(2){grid-column:4;grid-row:1}
+  .seat:nth-child(3){grid-column:2/4;grid-row:1/3}
+  .seat:nth-child(4){grid-column:1;grid-row:2}
+  .seat:nth-child(5){grid-column:4;grid-row:2}
+
+  .seat:not(.you){
+    width:100% !important;
+    max-width:none !important;
+    padding:3px 1px !important;
+    border-radius:24% 24% 7px 7px;
+    overflow:hidden !important;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+  }
+  .seat:not(.you) .name{font-size:8px;line-height:9px}
+  .seat:not(.you) .cash{font-size:6px;line-height:8px}
+  .seat:not(.you) .bet{margin-top:1px;padding:1px 3px;font-size:6px;line-height:9px}
+  .seat:not(.you) .side{min-height:12px;font-size:5px;line-height:7px;padding:0}
+  .seat:not(.you) .remote-bets{
+    width:94%;
+    grid-template-columns:1fr !important;
+    gap:2px !important;
+    margin:1px auto !important;
+  }
+  .seat:not(.you) .remote-drop,
+  .seat:not(.you) .remote-drop.behind{
+    grid-column:auto;
+    min-height:21px !important;
+    height:21px !important;
+    border-width:1px;
+  }
+  .seat:not(.you) .remote-drop.behind:after{display:none}
+  .seat:not(.you) .remote-drop small{font-size:5px;letter-spacing:0}
+  .seat:not(.you) .hand-wrap{
+    width:100%;
+    max-width:100%;
+    margin:1px auto !important;
+    padding:1px !important;
+  }
+  .seat:not(.you) .cards{
+    min-height:39px !important;
+    max-width:100%;
+    margin-top:0;
+    overflow:visible;
+  }
+  .seat:not(.you) .card{
+    width:27px;
+    height:39px;
+    padding:2px;
+    border-radius:4px;
+    font-size:8px;
+    margin-left:-11px;
+  }
+  .seat:not(.you) .card .s{font-size:11px}
+  .seat:not(.you) .cards:has(.card:nth-child(4)) .card{margin-left:-16px}
+  .seat:not(.you) .cards .card:first-child{margin-left:0}
+  .seat:not(.you) .total,
+  .seat:not(.you) .result{height:11px;font-size:7px;line-height:10px}
+  .seat:not(.you) .table-chip{width:20px !important;height:20px !important;border-width:2px;font-size:5px !important}
+
+  .seat.you{
+    width:100% !important;
+    max-width:none !important;
+    padding:7px 5px !important;
+    border-radius:38% 38% 12px 12px;
+    overflow:visible !important;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    z-index:7;
+    background:rgba(0,30,18,.52);
+    box-shadow:inset 0 0 22px rgba(229,196,110,.08);
+  }
+  .seat.you .name{font-size:15px;line-height:17px}
+  .seat.you .cash{font-size:9px}
+  .seat.you .bet{font-size:10px;padding:2px 7px}
+  .seat.you .side{min-height:18px;font-size:8px;padding:1px}
+  .seat.you .your-bets{
+    width:100%;
+    max-width:230px !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:4px !important;
+    margin:4px auto 2px !important;
+  }
+  .seat.you .your-bets .remote-drop,
+  .seat.you .your-bets .own-main{
+    grid-column:auto;
+    min-height:39px !important;
+    height:39px !important;
+  }
+  .seat.you:not(.has-split) .hand-wrap{
+    width:100%;
+    max-width:245px;
+    margin:5px auto 1px !important;
+    padding:4px 2px 2px;
+  }
+  .seat.you .cards{
+    min-height:84px !important;
+    width:100%;
+    max-width:245px;
+    margin-top:3px;
+    overflow:visible;
+  }
+  .seat.you:not(.has-split) .card{
+    width:58px;
+    height:82px;
+    padding:5px;
+    border-radius:7px;
+    font-size:18px;
+    margin-left:-24px;
+  }
+  .seat.you:not(.has-split) .card .s{font-size:23px}
+  .seat.you:not(.has-split) .cards:has(.card:nth-child(6)) .card{margin-left:-29px}
+  .seat.you .cards .card:first-child{margin-left:0}
+  .seat.you .total{height:20px;font-size:16px;line-height:19px}
+  .seat.you .result{height:20px;font-size:12px;line-height:18px}
+
+  .seat.you.has-split .hand-wrap{
+    width:calc(50% - 4px) !important;
+    min-height:88px !important;
+    margin:4px 1px !important;
+  }
+  .seat.you.has-split .hand-wrap .cards{min-height:59px !important}
+  .seat.you.has-split .hand-wrap .card{
+    width:41px;
+    height:59px;
+    font-size:12px;
+    margin-left:-20px;
+  }
+  .seat.you.has-split .hand-wrap .card:first-child{margin-left:0}
+  .seat.you.has-split{display:block;text-align:center}
+}
+
+/* Landscape phones retain one row, but reserve most of the visual weight for
+   the central human hand. */
+@media (max-width:950px) and (max-height:500px) and (orientation:landscape){
+  .seats{
+    grid-template-columns:minmax(0,.72fr) minmax(0,.72fr) minmax(190px,1.55fr) minmax(0,.72fr) minmax(0,.72fr) !important;
+  }
+  .seat:not(.you){padding:2px 1px !important}
+  .seat:not(.you) .name{font-size:7px}
+  .seat:not(.you) .cash,
+  .seat:not(.you) .bet,
+  .seat:not(.you) .side{font-size:5px}
+  .seat:not(.you) .remote-bets{gap:1px !important}
+  .seat:not(.you) .remote-drop{min-height:18px !important;height:18px !important}
+  .seat:not(.you) .card{width:24px;height:34px;font-size:7px;margin-left:-10px}
+  .seat:not(.you) .card .s{font-size:9px}
+  .seat:not(.you) .cards{min-height:34px !important}
+  .seat.you{padding:3px 5px !important;overflow:visible !important;z-index:7}
+  .seat.you .your-bets{max-width:210px !important}
+  .seat.you:not(.has-split) .hand-wrap{max-width:240px;margin:1px auto !important}
+  .seat.you .cards{min-height:58px !important;overflow:visible}
+  .seat.you:not(.has-split) .card{width:43px;height:59px;font-size:13px;margin-left:-15px}
+  .seat.you:not(.has-split) .card .s{font-size:17px}
+  .seat.you .total{font-size:12px}
+}
+
 </style>
 </head>
 <body>
