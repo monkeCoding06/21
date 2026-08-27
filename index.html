@@ -2502,6 +2502,121 @@ header{
   }
 }
 
+
+/* === MOBILE PORTRAIT REBALANCE V2 ===
+   More dealer presence, a slightly smaller player box, wider AI seats,
+   cleaner side-bet circles, and more breathing room overall. */
+@media (max-width:700px) and (orientation:portrait){
+  .table{grid-template-rows:118px 44px minmax(0,1fr) auto !important}
+  .dealer{height:118px !important;padding-top:3px !important}
+  .dealer .label{font-size:9px !important;letter-spacing:2.4px !important}
+  .dealer .total{height:20px !important;font-size:15px !important;line-height:18px !important}
+  .dealer .cards{min-height:78px !important;height:78px !important;margin-top:3px !important}
+  .dealer .card{width:54px !important;height:76px !important;padding:5px !important;border-radius:6px !important;font-size:17px !important;margin-left:-9px !important}
+  .dealer .card:first-child{margin-left:0 !important}
+  .dealer .card .s{font-size:22px !important}
+
+  .felt-print{height:44px !important;min-height:44px !important;margin:0 auto 2px !important}
+
+  .seats{
+    grid-template-columns:minmax(0,1fr) minmax(150px,1.72fr) minmax(0,1fr) !important;
+    grid-template-rows:repeat(2,minmax(0,1fr)) !important;
+    column-gap:6px !important;row-gap:10px !important;padding:5px 3px 6px !important;
+    align-items:stretch !important
+  }
+  .seat:nth-child(1){grid-column:1 !important;grid-row:1 !important}
+  .seat:nth-child(2){grid-column:3 !important;grid-row:1 !important}
+  .seat:nth-child(3){grid-column:2 !important;grid-row:1/3 !important}
+  .seat:nth-child(4){grid-column:1 !important;grid-row:2 !important}
+  .seat:nth-child(5){grid-column:3 !important;grid-row:2 !important}
+
+  .seat.you{
+    width:94% !important;height:90% !important;max-width:none !important;
+    justify-self:center !important;align-self:center !important;padding:5px 4px !important;
+    border-radius:34% 34% 11px 11px !important
+  }
+  .seat.you .name{font-size:14px !important;line-height:16px !important}
+  .seat.you .cash{font-size:8px !important}
+  .seat.you .bet{font-size:9px !important;padding:2px 6px !important}
+  .seat.you .side{min-height:13px !important;height:13px !important;padding:0 !important;font-size:7px !important;line-height:11px !important}
+  .seat.you .your-bets{width:94% !important;max-width:210px !important;margin:3px auto 1px !important;gap:5px !important}
+  .seat.you .your-bets .remote-drop,.seat.you .your-bets .own-main{min-height:35px !important;height:35px !important}
+  .seat.you:not(.has-split) .hand-wrap{width:94% !important;max-width:220px !important;margin:5px auto 0 !important;padding:3px 1px 1px !important}
+  .seat.you .cards{min-height:75px !important;height:auto !important;max-width:220px !important;margin-top:2px !important}
+  .seat.you:not(.has-split) .card{width:52px !important;height:74px !important;padding:5px !important;font-size:16px !important;margin-left:-20px !important}
+  .seat.you:not(.has-split) .card:first-child{margin-left:0 !important}
+  .seat.you:not(.has-split) .card .s{font-size:21px !important}
+  .seat.you .total{height:19px !important;font-size:15px !important;line-height:18px !important}
+  .seat.you .result{height:16px !important;font-size:10px !important;line-height:14px !important}
+
+  .seat:not(.you){
+    width:100% !important;height:100% !important;padding:4px 2px !important;
+    justify-self:stretch !important;align-self:stretch !important;justify-content:flex-start !important;
+    border-radius:25% 25% 8px 8px !important
+  }
+  .seat:not(.you) .name{font-size:9px !important;line-height:10px !important}
+  .seat:not(.you) .cash{font-size:6px !important;line-height:7px !important}
+  .seat:not(.you) .bet{font-size:6px !important;line-height:9px !important;padding:0 4px !important;margin-top:1px !important}
+  .seat:not(.you) .side{min-height:10px !important;height:10px !important;font-size:5px !important;line-height:8px !important;padding:0 !important}
+
+  .seat:not(.you) .remote-bets{
+    width:96% !important;max-width:none !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:2px !important;margin:2px auto 1px !important
+  }
+  .seat:not(.you) .remote-drop,.seat:not(.you) .remote-drop.behind{
+    grid-column:auto !important;width:100% !important;min-width:0 !important;
+    min-height:20px !important;height:20px !important;border-width:1px !important;
+    border-radius:50% !important;overflow:hidden !important
+  }
+  .seat:not(.you) .remote-drop.behind:after{display:none !important}
+
+  .seat:not(.you) .sidebet-mark.jacks-mark{
+    width:18px !important;height:14px !important;display:flex !important;flex-direction:column !important;
+    align-items:center !important;justify-content:center !important
+  }
+  .seat:not(.you) .jacks-mark .j123{font-size:6px !important;line-height:5px !important;letter-spacing:-.2px !important;margin:0 !important}
+  .seat:not(.you) .jacks-mark .jspade{font-size:6px !important;line-height:5px !important;margin:0 !important}
+  .seat:not(.you) .jacks-mark .jword{display:none !important}
+  .seat:not(.you) .sidebet-mark.c3-mark{width:16px !important;height:13px !important}
+  .seat:not(.you) .c3-mark .c3-card{width:5px !important;height:8px !important;top:0 !important;border-width:.8px !important}
+  .seat:not(.you) .c3-mark .c3-card.one{left:1px !important}
+  .seat:not(.you) .c3-mark .c3-card.two{left:5px !important}
+  .seat:not(.you) .c3-mark .c3-card.three{left:9px !important}
+  .seat:not(.you) .c3-mark .c3-card:before{display:none !important}
+  .seat:not(.you) .c3-mark .c3-text{font-size:4px !important;line-height:4px !important;bottom:0 !important}
+
+  .seat:not(.you) .hand-wrap{width:100% !important;min-height:51px !important;margin:2px auto 0 !important;padding:0 !important}
+  .seat:not(.you) .cards{
+    width:100% !important;min-height:42px !important;height:42px !important;margin:0 !important;padding:0 2px !important;
+    justify-content:center !important;align-items:flex-end !important;overflow:visible !important
+  }
+  .seat:not(.you) .card{width:29px !important;height:41px !important;padding:2px !important;font-size:9px !important;margin-left:-9px !important}
+  .seat:not(.you) .card:first-child{margin-left:0 !important}
+  .seat:not(.you) .card .s{font-size:12px !important}
+  .seat:not(.you) .cards:has(.card:nth-child(4)) .card{margin-left:-13px !important}
+  .seat:not(.you) .cards:has(.card:nth-child(6)) .card{margin-left:-17px !important}
+  .seat:not(.you) .total,.seat:not(.you) .result{height:10px !important;min-height:10px !important;font-size:7px !important;line-height:9px !important}
+
+  .remote-drop:has(.table-chip) .sidebet-mark,[data-ownbet]:has(.table-chip) .sidebet-mark{opacity:0 !important}
+
+  .seat.you .your-bets .sidebet-mark.jacks-mark{width:30px !important;height:25px !important}
+  .seat.you .your-bets .jacks-mark .j123{font-size:10px !important;line-height:8px !important}
+  .seat.you .your-bets .jacks-mark .jspade{font-size:10px !important;line-height:8px !important}
+  .seat.you .your-bets .jacks-mark .jword{font-size:4.5px !important;line-height:5px !important;letter-spacing:.65px !important}
+  .seat.you .your-bets .sidebet-mark.c3-mark{width:24px !important;height:20px !important}
+
+  #bets.bottom-bar{min-height:72px !important;padding-top:1px !important}
+  #bets .chip{width:33px !important;height:33px !important}
+  #bets #actions.bottom-actions .btn{min-height:31px !important;font-size:8px !important}
+}
+
+@media (max-width:390px) and (orientation:portrait){
+  .seats{grid-template-columns:minmax(0,1fr) minmax(142px,1.62fr) minmax(0,1fr) !important;column-gap:4px !important}
+  .seat.you{width:96% !important}
+  .seat:not(.you) .card{width:27px !important;height:39px !important;font-size:8px !important}
+  .seat:not(.you) .cards:has(.card:nth-child(5)) .card{margin-left:-15px !important}
+}
+
 </style>
 </head>
 <body>
