@@ -102,6 +102,24 @@ table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid 
  25%,75%{opacity:1;transform:translate(-50%,-50%) scale(1)}
  100%{opacity:0;transform:translate(-50%,-55%) scale(1.04)}
 }
+.round-result-banner{
+ position:fixed;left:50%;top:34%;transform:translate(-50%,-50%) scale(.82);
+ z-index:46;pointer-events:none;opacity:0;
+ padding:9px 18px;border:1px solid currentColor;border-radius:999px;
+ font:950 clamp(14px,2.2vw,21px)/1 system-ui,-apple-system,Segoe UI,sans-serif;
+ letter-spacing:1.5px;text-shadow:0 2px 4px #000;box-shadow:0 8px 24px #0009;
+ backdrop-filter:blur(8px);white-space:nowrap
+}
+.round-result-banner.win{color:#d8ffbf;background:rgba(20,92,45,.92)}
+.round-result-banner.lose{color:#ffd1d1;background:rgba(118,28,35,.94)}
+.round-result-banner.push{color:#ffe5a2;background:rgba(83,66,25,.94)}
+.round-result-banner.show{animation:roundResult 1.8s cubic-bezier(.2,.8,.25,1) both}
+@keyframes roundResult{
+ 0%{opacity:0;transform:translate(-50%,-45%) scale(.72)}
+ 14%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}
+ 24%,72%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+ 100%{opacity:0;transform:translate(-50%,-65%) scale(.96)}
+}
 
 
 /* Printed casino-felt rule and insurance/bust arc */
@@ -1273,7 +1291,29 @@ header{
     touch-action:manipulation;
     -webkit-tap-highlight-color:transparent;
   }
-  #bets .hint{display:none !important}
+  #bets .hint{
+    display:block !important;
+    position:absolute !important;
+    left:auto !important;
+    right:6px !important;
+    top:-17px !important;
+    bottom:auto !important;
+    transform:none !important;
+    min-width:0 !important;
+    max-width:48vw !important;
+    padding:2px 7px;
+    border:1px solid rgba(229,196,110,.65);
+    border-radius:999px;
+    background:rgba(8,39,25,.94);
+    color:#ffe18a;
+    font-size:8px !important;
+    line-height:10px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    z-index:1100 !important;
+  }
+  #bets .hint:empty{display:none !important}
   .gesture-hint{
     display:block !important;
     right:8px !important;
@@ -1301,6 +1341,7 @@ header{
   .panel table{min-width:620px}
   #bsTable{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .blackjack-banner{font-size:clamp(38px,15vw,72px);letter-spacing:2px}
+  .round-result-banner{top:29%;padding:7px 12px;font-size:12px;letter-spacing:1px}
 }
 
 /* Extra compression for short phones and split-screen browser windows. */
@@ -1411,7 +1452,28 @@ header{
   #bets .chip{width:27px !important;height:27px !important;border-width:3px !important;font-size:6px !important}
   #bets #actions.bottom-actions{display:grid !important;grid-template-columns:repeat(7,minmax(34px,1fr));width:auto !important;gap:2px !important}
   #bets #actions.bottom-actions .btn{min-width:34px !important;min-height:28px;padding:3px 2px !important;font-size:7px !important}
-  #bets .hint,.gesture-hint{display:none !important}
+  #bets .hint{
+    display:block !important;
+    left:auto !important;
+    right:4px !important;
+    top:-12px !important;
+    bottom:auto !important;
+    transform:none !important;
+    min-width:0 !important;
+    max-width:42vw !important;
+    padding:1px 5px;
+    border:1px solid rgba(229,196,110,.65);
+    border-radius:999px;
+    background:rgba(8,39,25,.94);
+    color:#ffe18a;
+    font-size:6px !important;
+    line-height:8px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    z-index:1100 !important;
+  }
+  #bets .hint:empty,.gesture-hint{display:none !important}
 }
 
 /* === PLAYER-FOCUSED TABLE HIERARCHY ===
@@ -1677,7 +1739,7 @@ header{
 <p>Six decks. Every box receives two cards while the bank receives <b>only one initial card</b>. Boxes act one after another; only after all boxes finish does the bank draw its second card and then draw through 16 and stand on 17+. Equal-value cards may be split and re-split; split aces receive one additional card only. Doubling is allowed after the first two cards and after splits except split aces, and receives exactly one card. Three sevens are paid immediately. This practice table uses a 3:2 Black Jack payout; Casinos Austria notes that the actual offered variant may instead use 6:5 or 5:1 and posts the applicable payout at the physical table.</p>
 <p><b>Bet Behind:</b> Drag chips onto another box's Bet Behind field. You follow that box's result and do not control its decisions. If it splits, this simulator divides your behind stake across the resulting hands.</p><p><b>C3:</b> Highest Hearts 300:1 · Jacks in Black 200:1 · Triplets 50:1 · Red Carpet 4:1. <b>123Jacks:</b> 3 J♠ 300:1 · 3 Jacks 50:1 · 2 J♠ 20:1 · 2 Jacks 10:1 · 1 J♠ 4:1 · 1 Jack 2:1. <b>Bust:</b> dealer bust 2:1. Insurance is offered when the dealer's initial card is an ace and pays 2:1.</p>
 </details></div>
-<div class="blackjack-banner" id="blackjackBanner">BLACKJACK!</div><div class="modal" id="bsModal"><div class="panel"><div class="head"><div><h2 style="margin:0">Basic Strategy</h2><small>6 deck · dealer stands 17 · DAS</small></div><button class="btn dark" id="closeBS">Close</button></div><div id="bsTable" style="margin-top:14px"></div></div></div>
+<div class="blackjack-banner" id="blackjackBanner">BLACKJACK!</div><div class="round-result-banner" id="roundResultBanner" aria-live="polite"></div><div class="modal" id="bsModal"><div class="panel"><div class="head"><div><h2 style="margin:0">Basic Strategy</h2><small>6 deck · dealer stands 17 · DAS</small></div><button class="btn dark" id="closeBS">Close</button></div><div id="bsTable" style="margin-top:14px"></div></div></div>
 <script>
 const $=id=>document.getElementById(id), SUITS=['♠','♥','♦','♣'],RANKS=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
 const names=['Mia','Felix','YOU','Anna','David'];let shoe=[],players=[],dealer=[],bankroll=1000,state='bet',activePlayer=-1,activeHand=0,lastAnim=null,timer=null,roundStartBankroll=1000;const placed={main:0,c3:0,jacks:0,bust:0,insurance:0},stacks={main:[],c3:[],jacks:[],bust:[],insurance:[]};const remoteBets=Array.from({length:5},()=>({behind:0,c3:0,jacks:0,behindStack:[],c3Stack:[],jacksStack:[]}));
@@ -1819,6 +1881,12 @@ function announceBlackjack(){
  const banner=$('blackjackBanner');banner.classList.remove('show');void banner.offsetWidth;banner.classList.add('show');
  SFX.blackjack();render();return true;
 }
+function showRoundResult(net){
+ const banner=$('roundResultBanner'),kind=net>0?'win':net<0?'lose':'push';
+ banner.className=`round-result-banner ${kind}`;
+ banner.textContent=net>0?`WIN +${euro(net)}`:net<0?`LOSS -${euro(Math.abs(net))}`:'PUSH';
+ void banner.offsetWidth;banner.classList.add('show');
+}
 async function payoutBlackjack(){
  const h=players[2]&&players[2].hands[0];
  if(state!=='human'||dealer[0]?.r!=='A'||!h||!bj(h.cards,h.split))return;
@@ -1846,7 +1914,7 @@ function settleMain(){let dv=value(dealer).n,dbj=bj(dealer);for(const p of playe
      if(p.you&&h.payoutChosen&&bj(h.cards,h.split)){ret=h.bet*2.5;h.result='BLACKJACK';bankroll+=ret;continue}if(pv>21)h.result='BUST';else if(bj(h.cards,h.split)&&!dbj){ret=h.bet*2.5;h.result='BLACKJACK'}else if(dbj&&!bj(h.cards,h.split))h.result='LOSE';else if(dv>21||pv>dv){ret=h.bet*2;h.result='WIN'}else if(pv===dv){ret=h.bet;h.result='STAND-OFF'}else h.result='LOSE';p.you?bankroll+=ret:p.cash+=ret}if(p.bust){if(dv>21){let ret=p.bust*3;p.you?bankroll+=ret:p.cash+=ret;p.sideText+=(p.sideText?' · ':'')+`Bust +${euro(p.bust*2)}`}else p.sideText+=(p.sideText?' · ':'')+'Bust lost'}const pi=players.indexOf(p),bb=remoteBets[pi].behind;if(bb){let per=bb/p.hands.length,totalReturn=0;for(const h of p.hands){if(h.result==='BLACKJACK')totalReturn+=per*2.5;else if(h.result==='WIN'||h.result==='TRIPLE 7')totalReturn+=per*2;else if(h.result==='STAND-OFF')totalReturn+=per}bankroll+=totalReturn;let profit=totalReturn-bb;p.sideText+=(p.sideText?' · ':'')+(profit>0?`Behind +${euro(profit)}`:profit===0?'Behind push':'Behind lost')}}}
 async function insure(){let p=players[2],max=Math.min(p.hands[0].bet*2,bankroll),amt=Math.min(p.hands[0].bet/2,max);if(amt<=0)return;bankroll-=amt;p.insurance=amt;$('msg').textContent=`Insurance ${euro(amt)} placed (2:1). You can now take PAYOUT.`;render()}
 /* Insurance is resolved when dealer's second card arrives. */
-const oldDealerPhase=dealerPhase;dealerPhase=async function(){activePlayer=-1;state='dealer';$('msg').textContent='All boxes are finished — dealer draws now.';render();await sleep(450);await dealToDealer();let p=players[2];if(p.insurance){if(bj(dealer)){bankroll+=p.insurance*3;p.sideText+=(p.sideText?' · ':'')+`Insurance +${euro(p.insurance*2)}`}else p.sideText+=(p.sideText?' · ':'')+'Insurance lost';placed.insurance=0;stacks.insurance=[];render();paintBetChips()}while(value(dealer).n<17){await sleep(280);await dealToDealer()}settleMain();state='done';render();let net=bankroll-roundStartBankroll;let result=net>0?`You won ${euro(net)} this round.`:net<0?`You lost ${euro(Math.abs(net))} this round.`:'You broke even this round.';if(net>0){let yours=players[2].hands;if(yours.some(h=>h.result==='BLACKJACK'))SFX.blackjack();else SFX.win()}else if(net<0)SFX.lose();$('msg').textContent=(value(dealer).n>21?'Dealer busts — ':'')+result;await sleep(2200);$('bets').hidden=false;state='bet';$('msg').textContent=result+' Place your next bets.';
+const oldDealerPhase=dealerPhase;dealerPhase=async function(){activePlayer=-1;state='dealer';$('msg').textContent='All boxes are finished — dealer draws now.';render();await sleep(450);await dealToDealer();let p=players[2];if(p.insurance){if(bj(dealer)){bankroll+=p.insurance*3;p.sideText+=(p.sideText?' · ':'')+`Insurance +${euro(p.insurance*2)}`}else p.sideText+=(p.sideText?' · ':'')+'Insurance lost';placed.insurance=0;stacks.insurance=[];render();paintBetChips()}while(value(dealer).n<17){await sleep(280);await dealToDealer()}settleMain();state='done';render();let net=bankroll-roundStartBankroll;let result=net>0?`You won ${euro(net)} this round.`:net<0?`You lost ${euro(Math.abs(net))} this round.`:'You broke even this round.';showRoundResult(net);if(net>0){let yours=players[2].hands;if(yours.some(h=>h.result==='BLACKJACK'))SFX.blackjack();else SFX.win()}else if(net<0)SFX.lose();$('msg').textContent=(value(dealer).n>21?'Dealer busts — ':'')+result;await sleep(2200);$('bets').hidden=false;state='bet';$('msg').textContent=result+' Place your next bets.';
  players=names.map((n,i)=>mkPlayer(n,i===2));players.forEach(p=>{p.hands[0].cards=[];p.hands[0].bet=p.you?placed.main:0;p.c3=0;p.jacks=0;p.bust=0;p.sideText=''});
  dealer=[];activePlayer=-1;activeHand=0;render();updateBets()}
 
