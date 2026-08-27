@@ -1786,7 +1786,33 @@ function fitTableToViewport(){
  });
 }
 window.addEventListener('resize',fitTableToViewport);
-function value(h){let n=0,a=0;for(const c of h){if(c.r==='A'){n+=11;a++}else n+=['J','Q','K'].includes(c.r)?10:+c.r}while(n>21&&a){n-=10;a--}return{n,soft:a>0}}
+
+function value(h){
+  let total=0;
+  let aces=0;
+
+  for(const c of h){
+    if(c.r==='A'){
+      total+=11;
+      aces++;
+    }else{
+      total+=['J','Q','K'].includes(c.r)?10:+c.r;
+    }
+  }
+
+  // Aces stay 11 unless that would bust the hand.
+  while(total>21&&aces>0){
+    total-=10;
+    aces--;
+  }
+
+  return {n:total,soft:aces>0};
+}
+
+function dealerShouldHit(h){
+  return value(h).n<17;
+}
+
 function bj(h,splitHand=false){return !splitHand&&h.length===2&&value(h).n===21}
 function displayValue(h){
  if(!h||!h.length)return '';
@@ -1891,7 +1917,7 @@ async function payoutBlackjack(){
  const h=players[2]&&players[2].hands[0];
  if(state!=='human'||dealer[0]?.r!=='A'||!h||!bj(h.cards,h.split))return;
  h.payoutChosen=true;h.done=true;h.result='BLACKJACK';
- 
+
  $('msg').textContent='BLACKJACK — waiting for the rest of the table.';
  announceBlackjack();await sleep(450);
  state='posthuman';
@@ -1907,14 +1933,14 @@ function standHuman(){if(pendingDouble){bankroll+=pendingDouble;pendingDouble=0}
 async function doubleHuman(){let h=players[2].hands[activeHand];if(h.cards.length!==2||h.splitAces||bankroll<h.bet)return;bankroll-=h.bet;h.bet*=2;await dealToPlayer(2,activeHand);h.done=true;nextHuman()}
 async function splitHuman(){let p=players[2],h=p.hands[activeHand];if(h.cards.length!==2||cardValue(h.cards[0])!==cardValue(h.cards[1])||bankroll<h.bet||p.hands.length>=4)return;bankroll-=h.bet;let ace=cardValue(h.cards[0])===11,c=h.cards.pop(),nh={cards:[c],bet:h.bet,done:false,result:'',split:true,splitAces:ace};h.split=true;h.splitAces=ace;p.hands.splice(activeHand+1,0,nh);await dealToPlayer(2,activeHand);await dealToPlayer(2,activeHand+1);if(ace){h.done=nh.done=true;nextHuman()}else $('msg').textContent=`Your turn — playing split hand ${activeHand+1} of ${p.hands.length}.`;render()}
 async function nextHuman(){let p=players[2];for(let i=activeHand+1;i<p.hands.length;i++)if(!p.hands[i].done){pendingDouble=0;activeHand=i;$('msg').textContent=`Your turn — playing split hand ${i+1} of ${p.hands.length}.`;render();return}state='posthuman';for(let i=3;i<players.length;i++){activePlayer=i;render();await playAI(i)}await dealerPhase()}
-async function dealerPhase(){activePlayer=-1;state='dealer';$('msg').textContent='All boxes are finished — dealer draws now.';render();await sleep(450);await dealToDealer();while(value(dealer).n<17){await sleep(280);await dealToDealer()}settleMain();state='done';render();$('msg').textContent=value(dealer).n>21?'Dealer busts.':'Round complete.';await sleep(900);$('bets').hidden=false;state='bet';$('msg').textContent='Place your next bets.';
+async function dealerPhase(){activePlayer=-1;state='dealer';$('msg').textContent='All boxes are finished — dealer draws now.';render();await sleep(450);await dealToDealer();while(dealerShouldHit(dealer)){await sleep(280);await dealToDealer()}settleMain();state='done';render();$('msg').textContent=value(dealer).n>21?'Dealer busts.':'Round complete.';await sleep(900);$('bets').hidden=false;state='bet';$('msg').textContent='Place your next bets.';
  players=names.map((n,i)=>mkPlayer(n,i===2));players.forEach(p=>{p.hands[0].cards=[];p.hands[0].bet=p.you?placed.main:0;p.c3=0;p.jacks=0;p.bust=0;p.sideText=''});
  dealer=[];activePlayer=-1;activeHand=0;render();updateBets()}
 function settleMain(){let dv=value(dealer).n,dbj=bj(dealer);for(const p of players){for(const h of p.hands){if(h.result==='TRIPLE 7')continue;let pv=value(h.cards).n,ret=0;
      if(p.you&&h.payoutChosen&&bj(h.cards,h.split)){ret=h.bet*2.5;h.result='BLACKJACK';bankroll+=ret;continue}if(pv>21)h.result='BUST';else if(bj(h.cards,h.split)&&!dbj){ret=h.bet*2.5;h.result='BLACKJACK'}else if(dbj&&!bj(h.cards,h.split))h.result='LOSE';else if(dv>21||pv>dv){ret=h.bet*2;h.result='WIN'}else if(pv===dv){ret=h.bet;h.result='STAND-OFF'}else h.result='LOSE';p.you?bankroll+=ret:p.cash+=ret}if(p.bust){if(dv>21){let ret=p.bust*3;p.you?bankroll+=ret:p.cash+=ret;p.sideText+=(p.sideText?' · ':'')+`Bust +${euro(p.bust*2)}`}else p.sideText+=(p.sideText?' · ':'')+'Bust lost'}const pi=players.indexOf(p),bb=remoteBets[pi].behind;if(bb){let per=bb/p.hands.length,totalReturn=0;for(const h of p.hands){if(h.result==='BLACKJACK')totalReturn+=per*2.5;else if(h.result==='WIN'||h.result==='TRIPLE 7')totalReturn+=per*2;else if(h.result==='STAND-OFF')totalReturn+=per}bankroll+=totalReturn;let profit=totalReturn-bb;p.sideText+=(p.sideText?' · ':'')+(profit>0?`Behind +${euro(profit)}`:profit===0?'Behind push':'Behind lost')}}}
 async function insure(){let p=players[2],max=Math.min(p.hands[0].bet*2,bankroll),amt=Math.min(p.hands[0].bet/2,max);if(amt<=0)return;bankroll-=amt;p.insurance=amt;$('msg').textContent=`Insurance ${euro(amt)} placed (2:1). You can now take PAYOUT.`;render()}
 /* Insurance is resolved when dealer's second card arrives. */
-const oldDealerPhase=dealerPhase;dealerPhase=async function(){activePlayer=-1;state='dealer';$('msg').textContent='All boxes are finished — dealer draws now.';render();await sleep(450);await dealToDealer();let p=players[2];if(p.insurance){if(bj(dealer)){bankroll+=p.insurance*3;p.sideText+=(p.sideText?' · ':'')+`Insurance +${euro(p.insurance*2)}`}else p.sideText+=(p.sideText?' · ':'')+'Insurance lost';placed.insurance=0;stacks.insurance=[];render();paintBetChips()}while(value(dealer).n<17){await sleep(280);await dealToDealer()}settleMain();state='done';render();let net=bankroll-roundStartBankroll;let result=net>0?`You won ${euro(net)} this round.`:net<0?`You lost ${euro(Math.abs(net))} this round.`:'You broke even this round.';showRoundResult(net);if(net>0){let yours=players[2].hands;if(yours.some(h=>h.result==='BLACKJACK'))SFX.blackjack();else SFX.win()}else if(net<0)SFX.lose();$('msg').textContent=(value(dealer).n>21?'Dealer busts — ':'')+result;await sleep(2200);$('bets').hidden=false;state='bet';$('msg').textContent=result+' Place your next bets.';
+const oldDealerPhase=dealerPhase;dealerPhase=async function(){activePlayer=-1;state='dealer';$('msg').textContent='All boxes are finished — dealer draws now.';render();await sleep(450);await dealToDealer();let p=players[2];if(p.insurance){if(bj(dealer)){bankroll+=p.insurance*3;p.sideText+=(p.sideText?' · ':'')+`Insurance +${euro(p.insurance*2)}`}else p.sideText+=(p.sideText?' · ':'')+'Insurance lost';placed.insurance=0;stacks.insurance=[];render();paintBetChips()}while(dealerShouldHit(dealer)){await sleep(280);await dealToDealer()}settleMain();state='done';render();let net=bankroll-roundStartBankroll;let result=net>0?`You won ${euro(net)} this round.`:net<0?`You lost ${euro(Math.abs(net))} this round.`:'You broke even this round.';showRoundResult(net);if(net>0){let yours=players[2].hands;if(yours.some(h=>h.result==='BLACKJACK'))SFX.blackjack();else SFX.win()}else if(net<0)SFX.lose();$('msg').textContent=(value(dealer).n>21?'Dealer busts — ':'')+result;await sleep(2200);$('bets').hidden=false;state='bet';$('msg').textContent=result+' Place your next bets.';
  players=names.map((n,i)=>mkPlayer(n,i===2));players.forEach(p=>{p.hands[0].cards=[];p.hands[0].bet=p.you?placed.main:0;p.c3=0;p.jacks=0;p.bust=0;p.sideText=''});
  dealer=[];activePlayer=-1;activeHand=0;render();updateBets()}
 
@@ -1954,9 +1980,20 @@ function paintBetChips(){
 }
 function updateBets(){
  const total=placed.main+placed.c3+placed.jacks+placed.bust+remoteBets.reduce((sum,r)=>sum+r.behind+r.c3+r.jacks,0);
+
+ // Keep the visible MAIN amount synchronized with the wager while betting.
+ if(state==='bet'&&players[2]?.hands?.[0]){
+   players[2].hands[0].bet=placed.main;
+ }
+
  $('dealBtn').disabled=placed.main<5||total>bankroll;
  $('clearBets').disabled=state!=='bet'||total===0;
  $('msg').textContent=total>bankroll?'Not enough bankroll.':placed.main<5?'Drag at least €5 to MAIN.':`Total wager: ${euro(total)}`;
+
+ // Update "Main €..." immediately, just like Total wager.
+ const mainDisplay=document.querySelector('.seat.you .bet');
+ if(mainDisplay)mainDisplay.textContent=`Main ${euro(placed.main)}`;
+
  paintBetChips();
 }
 function clearAllBets(){
