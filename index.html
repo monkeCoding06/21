@@ -2794,6 +2794,105 @@ header .stats{
   }
 }
 
+
+/* === MOBILE POLISH: THINNER HEADER / SHORTER YOU / CLEAN C3 === */
+@media (max-width:700px) and (orientation:portrait){
+  header{
+    min-height:48px !important;
+    height:auto !important;
+    padding:calc(2px + env(safe-area-inset-top)) max(6px,env(safe-area-inset-right)) 2px max(6px,env(safe-area-inset-left)) !important;
+    gap:5px !important;
+  }
+  .logo{
+    font-size:9px !important;
+    line-height:1 !important;
+    letter-spacing:.9px !important;
+  }
+  .logo b{margin-top:1px !important}
+  header .stats{
+    gap:1px 3px !important;
+    font-size:7.5px !important;
+    line-height:9px !important;
+  }
+  header .stats .btn{
+    min-height:20px !important;
+    height:20px !important;
+    padding:1px 5px !important;
+    border-radius:5px !important;
+    font-size:7px !important;
+    line-height:16px !important;
+  }
+  #bsBtn{
+    font-size:6.6px !important;
+    padding-inline:5px !important;
+  }
+  #soundBtn,#rulesBtn{min-width:0 !important}
+
+  .seat.you:not(.has-split){
+    height:78% !important;
+    min-height:0 !important;
+    align-self:center !important;
+    justify-content:center !important;
+  }
+  .seat.you.has-split{
+    height:88% !important;
+    align-self:center !important;
+  }
+  .seat.you .name{margin:0 !important}
+  .seat.you .cash{line-height:10px !important}
+  .seat.you .bet{margin-top:2px !important}
+  .seat.you .your-bets{margin:5px auto 2px !important}
+  .seat.you:not(.has-split) .hand-wrap{margin:7px auto 0 !important}
+
+  .seat.you .your-bets [data-ownbet="c3"] .sidebet-mark.c3-mark{
+    width:30px !important;
+    height:24px !important;
+  }
+  .seat.you .your-bets [data-ownbet="c3"] .c3-card{
+    width:9px !important;
+    height:13px !important;
+    top:2px !important;
+    border:1.1px solid rgba(239,224,168,.95) !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    border-radius:2px !important;
+  }
+  .seat.you .your-bets [data-ownbet="c3"] .c3-card:before{
+    display:none !important;
+    content:none !important;
+  }
+  .seat.you .your-bets [data-ownbet="c3"] .c3-card.one{
+    left:50% !important;
+    transform:translateX(-120%) rotate(-13deg) !important;
+  }
+  .seat.you .your-bets [data-ownbet="c3"] .c3-card.two{
+    left:50% !important;
+    transform:translateX(-50%) rotate(0deg) !important;
+  }
+  .seat.you .your-bets [data-ownbet="c3"] .c3-card.three{
+    left:50% !important;
+    transform:translateX(20%) rotate(13deg) !important;
+  }
+  .seat.you .your-bets [data-ownbet="c3"] .c3-text{
+    left:50% !important;
+    bottom:0 !important;
+    transform:translateX(-50%) !important;
+    font:900 6px/6px Georgia,"Times New Roman",serif !important;
+    letter-spacing:.25px !important;
+    color:#f2e2aa !important;
+  }
+}
+
+@media (max-width:390px) and (orientation:portrait){
+  header{min-height:46px !important}
+  header .stats .btn{
+    padding-inline:4px !important;
+    font-size:6.5px !important;
+  }
+  #bsBtn{font-size:6.1px !important}
+  .seat.you:not(.has-split){height:76% !important}
+}
+
 </style>
 </head>
 <body>
