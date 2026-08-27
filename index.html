@@ -2340,6 +2340,168 @@ header{
   }
 }
 
+
+/* === FINAL SIDE-BET ALIGNMENT / CHIP LAYER FIX ===
+   Symbols behave like printed felt: centered, small on AI boxes, and always
+   underneath wager chips. */
+.remote-drop{
+  isolation:isolate;
+}
+
+/* Printed mark is the bottom layer. */
+.remote-drop .sidebet-mark{
+  z-index:1 !important;
+  left:50% !important;
+  top:50% !important;
+  margin:0 !important;
+  transform:translate(-50%,-50%) !important;
+  transform-origin:center center !important;
+}
+
+/* Wager chips always sit above the printed C3 / 123Jacks artwork. */
+.remote-drop > .table-chip-stack,
+[data-ownbet] > .table-chip-stack{
+  z-index:20 !important;
+}
+.remote-drop .table-chip,
+[data-ownbet] .table-chip{
+  position:absolute !important;
+}
+
+/* Once a wager is on the field, let the printed mark fade into the felt
+   beneath the jeton instead of fighting visually with it. */
+.remote-drop:has(.table-chip) .sidebet-mark,
+[data-ownbet]:has(.table-chip) .sidebet-mark{
+  opacity:.20 !important;
+}
+
+/* Player-side fields: contained and centered inside their oval. */
+.seat.you .your-bets .sidebet-mark.jacks-mark{
+  width:34px !important;
+  height:29px !important;
+}
+.seat.you .your-bets .jacks-mark .j123{
+  font-size:11px !important;
+  line-height:9px !important;
+}
+.seat.you .your-bets .jacks-mark .jspade{
+  font-size:12px !important;
+  line-height:9px !important;
+}
+.seat.you .your-bets .jacks-mark .jword{
+  font-size:5px !important;
+  line-height:5px !important;
+  letter-spacing:.75px !important;
+}
+
+.seat.you .your-bets .sidebet-mark.c3-mark{
+  width:27px !important;
+  height:22px !important;
+}
+.seat.you .your-bets .c3-mark .c3-card{
+  width:9px !important;
+  height:13px !important;
+  top:1px !important;
+}
+.seat.you .your-bets .c3-mark .c3-card.one{left:2px !important}
+.seat.you .your-bets .c3-mark .c3-card.two{left:7px !important}
+.seat.you .your-bets .c3-mark .c3-card.three{left:12px !important}
+.seat.you .your-bets .c3-mark .c3-text{
+  font-size:6px !important;
+  line-height:6px !important;
+}
+
+/* AI side boxes: the marks must stay entirely inside their very small fields. */
+@media (max-width:700px) and (orientation:portrait){
+  .seat:not(.you) .remote-bets{
+    grid-template-columns:1.15fr .9fr .95fr !important;
+    align-items:center !important;
+  }
+
+  .seat:not(.you) .remote-drop{
+    overflow:hidden !important;
+  }
+
+  .seat:not(.you) .sidebet-mark.jacks-mark{
+    width:18px !important;
+    height:13px !important;
+  }
+  .seat:not(.you) .jacks-mark .j123{
+    font-size:5.5px !important;
+    line-height:4.5px !important;
+    letter-spacing:-.25px !important;
+  }
+  .seat:not(.you) .jacks-mark .jspade{
+    font-size:6px !important;
+    line-height:4px !important;
+    margin:0 !important;
+  }
+  .seat:not(.you) .jacks-mark .jword{
+    font-size:2.5px !important;
+    line-height:3px !important;
+    letter-spacing:.15px !important;
+    margin:0 !important;
+  }
+
+  .seat:not(.you) .sidebet-mark.c3-mark{
+    width:15px !important;
+    height:11px !important;
+  }
+  .seat:not(.you) .c3-mark .c3-card{
+    width:5px !important;
+    height:7px !important;
+    top:0 !important;
+    border-width:.8px !important;
+  }
+  .seat:not(.you) .c3-mark .c3-card.one{left:0 !important}
+  .seat:not(.you) .c3-mark .c3-card.two{left:3.5px !important}
+  .seat:not(.you) .c3-mark .c3-card.three{left:7px !important}
+  .seat:not(.you) .c3-mark .c3-card.one:before,
+  .seat:not(.you) .c3-mark .c3-card.two:before,
+  .seat:not(.you) .c3-mark .c3-card.three:before{
+    font-size:2.3px !important;
+    left:.5px !important;
+    top:.3px !important;
+  }
+  .seat:not(.you) .c3-mark .c3-text{
+    font-size:3px !important;
+    line-height:3px !important;
+    bottom:0 !important;
+  }
+}
+
+/* Extra-small phones get one more reduction so nothing leaks from the side box. */
+@media (max-width:390px) and (orientation:portrait){
+  .seat:not(.you) .sidebet-mark.jacks-mark{
+    width:16px !important;
+    height:12px !important;
+  }
+  .seat:not(.you) .jacks-mark .j123{font-size:5px !important}
+  .seat:not(.you) .jacks-mark .jspade{font-size:5.5px !important}
+  .seat:not(.you) .jacks-mark .jword{font-size:2.2px !important}
+
+  .seat:not(.you) .sidebet-mark.c3-mark{
+    width:13px !important;
+    height:10px !important;
+  }
+}
+
+/* Landscape phones also keep the print underneath the chips and inside fields. */
+@media (max-width:950px) and (max-height:500px) and (orientation:landscape){
+  .seat:not(.you) .sidebet-mark.jacks-mark{
+    width:17px !important;
+    height:12px !important;
+  }
+  .seat:not(.you) .jacks-mark .j123{font-size:5px !important}
+  .seat:not(.you) .jacks-mark .jspade{font-size:5.5px !important}
+  .seat:not(.you) .jacks-mark .jword{font-size:2.3px !important}
+
+  .seat:not(.you) .sidebet-mark.c3-mark{
+    width:14px !important;
+    height:10px !important;
+  }
+}
+
 </style>
 </head>
 <body>
