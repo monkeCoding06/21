@@ -2893,6 +2893,83 @@ header .stats{
   .seat.you:not(.has-split){height:76% !important}
 }
 
+
+/* === MOBILE EXTRA-SHORT HEADER === */
+@media (max-width:700px) and (orientation:portrait){
+  header{
+    min-height:42px !important;
+    height:auto !important;
+    padding:
+      calc(1px + env(safe-area-inset-top))
+      max(5px,env(safe-area-inset-right))
+      1px
+      max(5px,env(safe-area-inset-left)) !important;
+    gap:4px !important;
+  }
+
+  .logo{
+    font-size:8px !important;
+    line-height:.98 !important;
+    letter-spacing:.75px !important;
+  }
+
+  .logo b{
+    margin-top:0 !important;
+  }
+
+  header .stats{
+    gap:1px 3px !important;
+    font-size:7px !important;
+    line-height:8px !important;
+  }
+
+  header .stats .btn{
+    min-height:18px !important;
+    height:18px !important;
+    padding:0 4px !important;
+    border-radius:5px !important;
+    font-size:6.6px !important;
+    line-height:14px !important;
+  }
+
+  #bsBtn{
+    font-size:6.2px !important;
+    padding-inline:4px !important;
+  }
+
+  #rulesBtn,
+  #soundBtn{
+    padding-inline:4px !important;
+  }
+}
+
+@media (max-width:390px) and (orientation:portrait){
+  header{
+    min-height:40px !important;
+    padding:
+      calc(1px + env(safe-area-inset-top))
+      max(4px,env(safe-area-inset-right))
+      1px
+      max(4px,env(safe-area-inset-left)) !important;
+  }
+
+  .logo{
+    font-size:7.5px !important;
+    letter-spacing:.65px !important;
+  }
+
+  header .stats .btn{
+    min-height:17px !important;
+    height:17px !important;
+    font-size:6.1px !important;
+    padding:0 3px !important;
+  }
+
+  #bsBtn{
+    font-size:5.8px !important;
+  }
+}
+
 </style>
 </head>
 <body>
