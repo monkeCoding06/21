@@ -2617,10 +2617,187 @@ header{
   .seat:not(.you) .cards:has(.card:nth-child(5)) .card{margin-left:-15px !important}
 }
 
+
+/* === FINAL SIDE-BET CENTERING + HEADER RULES === */
+.remote-drop,
+.seat.you .your-bets .remote-drop{
+  position:relative !important;
+}
+
+.remote-drop .sidebet-mark,
+.seat.you .your-bets .remote-drop .sidebet-mark{
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  right:auto !important;
+  bottom:auto !important;
+  margin:0 !important;
+  transform:translate(-50%,-50%) !important;
+  transform-origin:50% 50% !important;
+  text-align:center !important;
+  box-sizing:border-box !important;
+}
+
+.sidebet-mark.jacks-mark{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+}
+.jacks-mark .j123,
+.jacks-mark .jspade,
+.jacks-mark .jword{
+  position:static !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  transform:none !important;
+  text-align:center !important;
+}
+
+.sidebet-mark.c3-mark{
+  position:absolute !important;
+}
+.c3-mark .c3-card{
+  top:2px !important;
+}
+.c3-mark .c3-card.one{
+  left:50% !important;
+  transform:translateX(-115%) rotate(-14deg) !important;
+}
+.c3-mark .c3-card.two{
+  left:50% !important;
+  transform:translateX(-50%) rotate(-2deg) !important;
+}
+.c3-mark .c3-card.three{
+  left:50% !important;
+  transform:translateX(15%) rotate(12deg) !important;
+}
+.c3-mark .c3-text{
+  left:50% !important;
+  right:auto !important;
+  transform:translateX(-50%) !important;
+  text-align:center !important;
+  margin:0 !important;
+}
+
+.remote-drop > .table-chip-stack,
+[data-ownbet] > .table-chip-stack{
+  z-index:30 !important;
+}
+
+.rules{display:none !important}
+
+.rules-panel{
+  width:min(760px,100%) !important;
+}
+.rules-modal-content{
+  margin-top:14px;
+  color:#d7ddd8;
+  line-height:1.55;
+}
+.rules-modal-content p{
+  margin:10px 0;
+}
+.rules-modal-content b{
+  color:#f0d47f;
+}
+
+header .stats{
+  align-items:center;
+}
+
+@media (max-width:700px){
+  header{
+    min-height:58px !important;
+  }
+
+  header .stats{
+    grid-template-columns:auto auto auto !important;
+    grid-template-rows:auto auto !important;
+    gap:3px 4px !important;
+  }
+
+  header .stats span:nth-of-type(1){
+    grid-column:1;
+    grid-row:1;
+  }
+
+  header .stats span:nth-of-type(2){
+    grid-column:2 / 4;
+    grid-row:1;
+  }
+
+  #soundBtn{
+    grid-column:1;
+    grid-row:2;
+  }
+
+  #bsBtn{
+    grid-column:2;
+    grid-row:2;
+  }
+
+  #rulesBtn{
+    grid-column:3;
+    grid-row:2;
+  }
+
+  header .stats .btn{
+    min-height:24px !important;
+    padding:3px 5px !important;
+    font-size:7.5px !important;
+    white-space:nowrap;
+  }
+
+  #bsBtn{
+    font-size:7px !important;
+  }
+
+  body{
+    grid-template-rows:auto minmax(0,1fr) !important;
+  }
+
+  .table{
+    min-height:0 !important;
+  }
+
+  .seat:not(.you) .remote-drop .sidebet-mark{
+    left:50% !important;
+    top:50% !important;
+    transform:translate(-50%,-50%) !important;
+  }
+
+  .seat:not(.you) .c3-mark .c3-card.one{
+    left:50% !important;
+    transform:translateX(-115%) rotate(-14deg) !important;
+  }
+  .seat:not(.you) .c3-mark .c3-card.two{
+    left:50% !important;
+    transform:translateX(-50%) rotate(-2deg) !important;
+  }
+  .seat:not(.you) .c3-mark .c3-card.three{
+    left:50% !important;
+    transform:translateX(15%) rotate(12deg) !important;
+  }
+}
+
+@media (max-width:950px) and (max-height:500px) and (orientation:landscape){
+  header .stats{
+    display:flex !important;
+    gap:4px !important;
+  }
+  header .stats .btn{
+    padding:2px 5px !important;
+    font-size:7px !important;
+  }
+}
+
 </style>
 </head>
 <body>
-<header><div class="logo">BLACKJACK <b>AUSTRIA PRACTICE</b></div><div class="stats"><span>Bankroll <strong id="bank">€1,000</strong></span><span>Shoe <strong id="shoeN">312</strong></span><button class="btn dark" id="soundBtn" title="Toggle sound">🔊 SFX</button><button class="btn dark" id="bsBtn">Basic Strategy</button></div></header>
+<header><div class="logo">BLACKJACK <b>AUSTRIA PRACTICE</b></div><div class="stats"><span>Bankroll <strong id="bank">€1,000</strong></span><span>Shoe <strong id="shoeN">312</strong></span><button class="btn dark" id="soundBtn" title="Toggle sound">🔊 SFX</button><button class="btn dark" id="bsBtn">Basic Strategy</button><button class="btn dark" id="rulesBtn">RULES</button></div></header>
 <main class="table" id="gameTable"><div class="gesture-hint">Double-click: Hit · Swipe: Stand · Add equal chips to MAIN: Double · Left + right click: Split</div>
 <div id="shoe"></div>
 <section class="dealer"><div class="label">Bank / Dealer</div><div class="total" id="dealerTotal"></div><div class="cards" id="dealerCards"></div></section>
@@ -2660,10 +2837,21 @@ header{
   <span class="hint" id="hint"></span>
 </div>
 </section></main>
-<div class="rules"><details><summary>Casinos Austria Classic rules implemented</summary>
-<p>Six decks. Every box receives two cards while the bank receives <b>only one initial card</b>. Boxes act one after another; only after all boxes finish does the bank draw its second card and then draw through 16 and stand on 17+. Equal-value cards may be split and re-split; split aces receive one additional card only. Doubling is allowed after the first two cards and after splits except split aces, and receives exactly one card. Three sevens are paid immediately. This practice table uses a 3:2 Black Jack payout; Casinos Austria notes that the actual offered variant may instead use 6:5 or 5:1 and posts the applicable payout at the physical table.</p>
+<div class="modal" id="rulesModal">
+  <div class="panel rules-panel">
+    <div class="head">
+      <div>
+        <h2 style="margin:0">Rules</h2>
+        <small>Casinos Austria Classic practice rules</small>
+      </div>
+      <button class="btn dark" id="closeRules">Close</button>
+    </div>
+    <div class="rules-modal-content">
+      <p>Six decks. Every box receives two cards while the bank receives <b>only one initial card</b>. Boxes act one after another; only after all boxes finish does the bank draw its second card and then draw through 16 and stand on 17+. Equal-value cards may be split and re-split; split aces receive one additional card only. Doubling is allowed after the first two cards and after splits except split aces, and receives exactly one card. Three sevens are paid immediately. This practice table uses a 3:2 Black Jack payout; Casinos Austria notes that the actual offered variant may instead use 6:5 or 5:1 and posts the applicable payout at the physical table.</p>
 <p><b>Bet Behind:</b> Drag chips onto another box's Bet Behind field. You follow that box's result and do not control its decisions. If it splits, this simulator divides your behind stake across the resulting hands.</p><p><b>C3:</b> Highest Hearts 300:1 · Jacks in Black 200:1 · Triplets 50:1 · Red Carpet 4:1. <b>123Jacks:</b> 3 J♠ 300:1 · 3 Jacks 50:1 · 2 J♠ 20:1 · 2 Jacks 10:1 · 1 J♠ 4:1 · 1 Jack 2:1. <b>Bust:</b> dealer bust 2:1. Insurance is offered when the dealer's initial card is an ace and pays 2:1.</p>
-</details></div>
+    </div>
+  </div>
+</div>
 <div class="blackjack-banner" id="blackjackBanner">BLACKJACK!</div><div class="round-result-banner" id="roundResultBanner" aria-live="polite"></div><div class="modal" id="bsModal"><div class="panel"><div class="head"><div><h2 style="margin:0">Basic Strategy</h2><small>6 deck · dealer stands 17 · DAS</small></div><button class="btn dark" id="closeBS">Close</button></div><div id="bsTable" style="margin-top:14px"></div></div></div>
 <script>
 const $=id=>document.getElementById(id), SUITS=['♠','♥','♦','♣'],RANKS=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
@@ -3105,7 +3293,7 @@ gameTable.addEventListener('mouseup',e=>{splitButtons=e.buttons;if(!(e.buttons&1
 gameTable.addEventListener('contextmenu',e=>{
  if(state==='human'&&e.target.closest('#gameTable'))e.preventDefault()
 });
-$('dealBtn').onclick=()=>{SFX.click();start()};$('hit').onclick=()=>{SFX.click();hitHuman()};$('stand').onclick=()=>{SFX.click();standHuman()};$('double').onclick=()=>{SFX.click();doubleHuman()};$('split').onclick=()=>{SFX.click();splitHuman()};$('payout').onclick=()=>{SFX.click();payoutBlackjack()};$('clearBets').onclick=clearAllBets;$('soundBtn').onclick=()=>{sfxOn=!sfxOn;$('soundBtn').textContent=sfxOn?'🔊 SFX':'🔇 SFX';if(sfxOn){ac();SFX.click()}};$('bsBtn').onclick=()=>{$('bsModal').classList.add('show');bs()};$('closeBS').onclick=()=>$('bsModal').classList.remove('show');
+$('dealBtn').onclick=()=>{SFX.click();start()};$('hit').onclick=()=>{SFX.click();hitHuman()};$('stand').onclick=()=>{SFX.click();standHuman()};$('double').onclick=()=>{SFX.click();doubleHuman()};$('split').onclick=()=>{SFX.click();splitHuman()};$('payout').onclick=()=>{SFX.click();payoutBlackjack()};$('clearBets').onclick=clearAllBets;$('soundBtn').onclick=()=>{sfxOn=!sfxOn;$('soundBtn').textContent=sfxOn?'🔊 SFX':'🔇 SFX';if(sfxOn){ac();SFX.click()}};$('bsBtn').onclick=()=>{$('bsModal').classList.add('show');bs()};$('closeBS').onclick=()=>$('bsModal').classList.remove('show');$('rulesBtn').onclick=()=>$('rulesModal').classList.add('show');$('closeRules').onclick=()=>$('rulesModal').classList.remove('show');$('rulesModal').onclick=e=>{if(e.target===$('rulesModal'))$('rulesModal').classList.remove('show')};
 newShoe();
 players=names.map((n,i)=>mkPlayer(n,i===2));
 players.forEach(p=>{p.hands[0].cards=[];p.hands[0].bet=p.you?placed.main:0;p.c3=0;p.jacks=0;p.bust=0;p.sideText=''});
