@@ -2086,6 +2086,260 @@ header{
   .c3-mark .c3-text{font-size:3px;line-height:4px;bottom:0}
 }
 
+
+/* === FELT-STYLE SIDE BET SYMBOLS OVERRIDE ===
+   Replace the white badge look with markings that feel printed on the felt. */
+.sidebet-mark{
+  position:relative !important;
+  z-index:2;
+  width:auto !important;
+  height:auto !important;
+  min-width:0 !important;
+  border:none !important;
+  border-radius:0 !important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:visible !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  color:#efe0a8 !important;
+  text-shadow:0 1px 1px #003321, 0 0 6px rgba(0,0,0,.25) !important;
+  pointer-events:none;
+  transform:none !important;
+}
+.sidebet-mark:after{
+  display:none !important;
+}
+
+/* Default printed mark sizing inside the betting ovals */
+.remote-drop .sidebet-mark{
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) !important;
+}
+
+/* 123 JACKS rendered like felt lettering instead of a tile/badge */
+.sidebet-mark.jacks-mark{
+  flex-direction:column;
+  gap:0;
+  font-family:Georgia,"Times New Roman",serif;
+  line-height:.8;
+}
+.jacks-mark .j123{
+  display:block;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:-.6px;
+  color:#f2e2aa;
+}
+.jacks-mark .jspade{
+  display:block;
+  font-size:14px;
+  line-height:11px;
+  color:#f2e2aa;
+  margin-top:-1px;
+}
+.jacks-mark .jword{
+  display:block;
+  font-size:6px;
+  line-height:7px;
+  font-weight:900;
+  letter-spacing:1px;
+  color:#f2e2aa;
+  margin-top:-1px;
+}
+
+/* C3 rendered as tiny outlined cards + label, matching the table style */
+.sidebet-mark.c3-mark{
+  width:30px !important;
+  height:24px !important;
+}
+.c3-mark .c3-card{
+  position:absolute;
+  width:11px;
+  height:15px;
+  top:1px;
+  border:1.25px solid rgba(239,224,168,.9);
+  border-radius:2px;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+.c3-mark .c3-card.one{
+  left:3px;
+  transform:rotate(-14deg);
+}
+.c3-mark .c3-card.two{
+  left:9px;
+  transform:rotate(-2deg);
+}
+.c3-mark .c3-card.three{
+  left:15px;
+  transform:rotate(12deg);
+}
+.c3-mark .c3-card.one:before,
+.c3-mark .c3-card.two:before,
+.c3-mark .c3-card.three:before{
+  position:absolute;
+  left:2px;
+  top:1px;
+  font:700 5px/1 Georgia,serif;
+}
+.c3-mark .c3-card.one:before{content:"♣"; color:#efe0a8;}
+.c3-mark .c3-card.two:before{content:"♥"; color:#d77e86;}
+.c3-mark .c3-card.three:before{content:"♠"; color:#efe0a8;}
+.c3-mark .c3-text{
+  position:absolute;
+  left:50%;
+  bottom:-1px;
+  transform:translateX(-50%);
+  z-index:5;
+  padding:0;
+  background:transparent !important;
+  font:900 8px/8px Georgia,"Times New Roman",serif;
+  letter-spacing:.2px;
+  white-space:nowrap;
+  color:#f2e2aa;
+}
+
+/* Make the symbols sit like printed marks inside all remote-drop circles */
+.remote-drop{
+  position:relative;
+}
+.remote-drop .sidebet-mark + small{
+  display:none !important;
+}
+
+/* Keep main player's versions a touch larger */
+.seat.you .your-bets .jacks-mark .j123{font-size:14px}
+.seat.you .your-bets .jacks-mark .jspade{font-size:15px}
+.seat.you .your-bets .jacks-mark .jword{font-size:7px}
+.seat.you .your-bets .c3-mark{
+  width:33px !important;
+  height:26px !important;
+}
+.seat.you .your-bets .c3-mark .c3-card{
+  width:12px;
+  height:16px;
+}
+
+/* Desktop side seats */
+@media (min-width:701px){
+  .seat:not(.you) .jacks-mark .j123{font-size:10px}
+  .seat:not(.you) .jacks-mark .jspade{font-size:11px; line-height:9px}
+  .seat:not(.you) .jacks-mark .jword{font-size:5px; line-height:5px}
+  .seat:not(.you) .c3-mark{
+    width:24px !important;
+    height:19px !important;
+  }
+  .seat:not(.you) .c3-mark .c3-card{
+    width:9px;
+    height:12px;
+    top:1px;
+  }
+  .seat:not(.you) .c3-mark .c3-card.one{left:2px}
+  .seat:not(.you) .c3-mark .c3-card.two{left:7px}
+  .seat:not(.you) .c3-mark .c3-card.three{left:12px}
+  .seat:not(.you) .c3-mark .c3-text{
+    font-size:6px;
+    line-height:6px;
+  }
+}
+
+/* Portrait phones: smaller, cleaner, more table-printed */
+@media (max-width:700px) and (orientation:portrait){
+  .seat.you .your-bets .remote-drop,
+  .seat.you .your-bets .own-main{
+    overflow:visible !important;
+  }
+
+  .seat.you .your-bets .jacks-mark .j123{font-size:12px}
+  .seat.you .your-bets .jacks-mark .jspade{font-size:13px; line-height:10px}
+  .seat.you .your-bets .jacks-mark .jword{font-size:6px; line-height:6px}
+  .seat.you .your-bets .c3-mark{
+    width:28px !important;
+    height:22px !important;
+  }
+  .seat.you .your-bets .c3-mark .c3-card{
+    width:10px;
+    height:14px;
+  }
+  .seat.you .your-bets .c3-mark .c3-card.one{left:2px}
+  .seat.you .your-bets .c3-mark .c3-card.two{left:7px}
+  .seat.you .your-bets .c3-mark .c3-card.three{left:12px}
+  .seat.you .your-bets .c3-mark .c3-text{
+    font-size:7px;
+    line-height:7px;
+  }
+
+  .seat:not(.you) .jacks-mark .j123{font-size:7px}
+  .seat:not(.you) .jacks-mark .jspade{font-size:8px; line-height:6px}
+  .seat:not(.you) .jacks-mark .jword{
+    font-size:3px;
+    line-height:3px;
+    letter-spacing:.35px;
+  }
+
+  .seat:not(.you) .c3-mark{
+    width:17px !important;
+    height:13px !important;
+  }
+  .seat:not(.you) .c3-mark .c3-card{
+    width:6px;
+    height:8px;
+    top:0;
+    border-width:1px;
+  }
+  .seat:not(.you) .c3-mark .c3-card.one{left:0}
+  .seat:not(.you) .c3-mark .c3-card.two{left:4px}
+  .seat:not(.you) .c3-mark .c3-card.three{left:8px}
+  .seat:not(.you) .c3-mark .c3-card.one:before,
+  .seat:not(.you) .c3-mark .c3-card.two:before,
+  .seat:not(.you) .c3-mark .c3-card.three:before{
+    font-size:3px;
+    left:1px;
+    top:0;
+  }
+  .seat:not(.you) .c3-mark .c3-text{
+    font-size:4px;
+    line-height:4px;
+    bottom:-1px;
+  }
+}
+
+/* Landscape phones */
+@media (max-width:950px) and (max-height:500px) and (orientation:landscape){
+  .jacks-mark .j123{font-size:8px}
+  .jacks-mark .jspade{font-size:8px; line-height:6px}
+  .jacks-mark .jword{font-size:3px; line-height:4px}
+
+  .c3-mark{
+    width:18px !important;
+    height:14px !important;
+  }
+  .c3-mark .c3-card{
+    width:6px;
+    height:9px;
+    top:0;
+    border-width:1px;
+  }
+  .c3-mark .c3-card.one{left:0}
+  .c3-mark .c3-card.two{left:4px}
+  .c3-mark .c3-card.three{left:8px}
+  .c3-mark .c3-card.one:before,
+  .c3-mark .c3-card.two:before,
+  .c3-mark .c3-card.three:before{
+    font-size:3px;
+    left:1px;
+    top:0;
+  }
+  .c3-mark .c3-text{
+    font-size:4px;
+    line-height:4px;
+    bottom:-1px;
+  }
+}
+
 </style>
 </head>
 <body>
